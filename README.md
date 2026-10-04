@@ -1,2 +1,0 @@
-# AgriDirect
-Prototype of AgriDirect
