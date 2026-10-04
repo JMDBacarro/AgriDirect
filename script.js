@@ -4,6 +4,7 @@
 // Replace the placeholder values below with your Firebase Web App configuration:
 // (Firebase Console -> Project Settings -> General -> Your apps -> Web app)
 
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyD-NZGy7XLD98K5tvqxW2JWbPi0FzsDW-w",
   authDomain: "agridirect-d189f.firebaseapp.com",
@@ -34,6 +35,7 @@ try {
 }
 
 // LOCAL STORAGE KEYS & IN-MEMORY STATE CACHE
+// LOCAL STORAGE KEYS
 const USERS_KEY = 'agri_users';
 const SESSION_KEY = 'agri_session';
 const PRODUCTS_KEY = 'agri_products';
@@ -42,26 +44,33 @@ const REVIEWS_KEY = 'agri_reviews';
 const MESSAGES_KEY = 'agri_messages';
 const QA_KEY = 'agri_qa';
 
-let usersState = [];
-let productsState = [];
-let ordersState = [];
-let reviewsState = [];
-let messagesState = [];
-let qaState = [];
-
-let cart = [];
-let activeCategory = 'all';
-let currentModalProductId = null;
-let activeChatEmail = null;
-let currentFarmerViewMode = 'buy'; // 'buy' or 'sell'
-
 // CROP GRADE DEFINITIONS & EXPLANATIONS
 const CROP_GRADES = {
-    "Grade A": { label: "Grade A (Export / Supermarket Premium)", badgeClass: "grade-a", description: "Export / Supermarket Premium: Superior appearance, uniform size, vibrant color, and zero visible surface defects." },
-    "Grade B": { label: "Grade B (Commercial / Fresh Local Market)", badgeClass: "grade-b", description: "Commercial / Fresh Market: High freshness and excellent taste with minor cosmetic blemishes or slight size variation." },
-    "Grade C": { label: "Grade C (Processing / Kitchen Grade)", badgeClass: "grade-c", description: "Processing / Kitchen Grade: Imperfect shape or size, ideal for cooking, juicing, canning, or commercial food prep." },
-    "Organic": { label: "Organic Certified (Chemical-Free)", badgeClass: "grade-organic", description: "Certified Organic: Grown without synthetic pesticides, chemical fertilizers, or GMOs in organic-certified soil." },
-    "Naturally Grown": { label: "Naturally Grown (Pesticide-Free)", badgeClass: "grade-natural", description: "Naturally Grown: Grown using traditional eco-friendly methods without harmful synthetic pesticides by local smallholders." }
+    "Grade A": {
+        label: "Grade A (Export / Supermarket Premium)",
+        badgeClass: "grade-a",
+        description: "Export / Supermarket Premium: Superior appearance, uniform size, vibrant color, and zero visible surface defects."
+    },
+    "Grade B": {
+        label: "Grade B (Commercial / Fresh Local Market)",
+        badgeClass: "grade-b",
+        description: "Commercial / Fresh Market: High freshness and excellent taste with minor cosmetic blemishes or slight size variation."
+    },
+    "Grade C": {
+        label: "Grade C (Processing / Kitchen Grade)",
+        badgeClass: "grade-c",
+        description: "Processing / Kitchen Grade: Imperfect shape or size, ideal for cooking, juicing, canning, or commercial food prep."
+    },
+    "Organic": {
+        label: "Organic Certified (Chemical-Free)",
+        badgeClass: "grade-organic",
+        description: "Certified Organic: Grown without synthetic pesticides, chemical fertilizers, or GMOs in organic-certified soil."
+    },
+    "Naturally Grown": {
+        label: "Naturally Grown (Pesticide-Free)",
+        badgeClass: "grade-natural",
+        description: "Naturally Grown: Grown using traditional eco-friendly methods without harmful synthetic pesticides by local smallholders."
+    }
 };
 
 // PHILIPPINE ADMINISTRATIVE HIERARCHY (PSGC 2026 REFERENCE)
@@ -83,6 +92,22 @@ const PH_LOCATIONS = {
         "La Union": ["Agoo", "Aringay", "Bacnotan", "Bagulin", "Balaoan", "Bangar", "Bauang", "Burgos", "Caba", "San Fernando City", "Luna", "Naguilian", "Pugo", "Rosario", "San Gabriel", "San Juan", "Santo Tomas", "Santol", "Sudipen", "Tubao"],
         "Pangasinan": ["Agno", "Aguilar", "Alcala", "Anda", "Asingan", "Balungao", "Bani", "Basista", "Bautista", "Bayambang", "Binalonan", "Binmaley", "Bolinao", "Bugallon", "Burgos", "Calasiao", "Alaminos City", "Dagupan City", "San Carlos City", "Urdaneta City", "Dasol", "Infanta", "Labrador", "Laoac", "Lingayen", "Mabini", "Malasiqui", "Manaoag", "Mangaldan", "Mangatarem", "Mapandan", "Natividad", "Pozorrubio", "Rosales", "San Fabian", "San Jacinto", "San Manuel", "San Nicolas", "San Quintin", "Santa Barbara", "Santa Maria", "Santo Tomas", "Sison", "Sual", "Tayug", "Umingan", "Urbiztondo", "Villasis"]
     },
+    "Cagayan Valley (Region II)": {
+        "Batanes": ["Basco", "Itbayat", "Ivana", "Mahatao", "Sabtang", "Uyugan"],
+        "Cagayan": ["Abulug", "Alcala", "Allacapan", "Amulung", "Aparri", "Baggao", "Ballesteros", "Buguey", "Calayan", "Camalaniugan", "Claveria", "Enrile", "Gattaran", "Gonzaga", "Iguig", "Lal-lo", "Lasam", "Pamplona", "Peñablanca", "Piat", "Rizal", "Sanchez-Mira", "Santa Ana", "Santa Praxedes", "Santa Teresita", "Santo Niño (Faire)", "Solana", "Tuao", "Tuguegarao City"],
+        "Isabela": ["Alicia", "Angadanan", "Aurora", "Benito Soliven", "Burgos", "Cabagan", "Cabatuan", "Cauayan City", "Ilagan City", "Santiago City", "Cordon", "Delfin Albano", "Dinapigue", "Divilacan", "Echague", "Gamu", "Jones", "Luna", "Maconacon", "Mallig", "Naguilian", "Palanan", "Quezon", "Quirino", "Ramon", "Reina Mercedes", "Roxas", "San Agustin", "San Guillermo", "San Isidro", "San Manuel", "San Mariano", "San Mateo", "San Pablo", "Santa Maria", "Santo Tomas", "Tumauini"],
+        "Nueva Vizcaya": ["Alfonso Castañeda", "Ambaguio", "Aritao", "Bagabag", "Bambang", "Bayombong", "Diadi", "Dupax Norte", "Dupax Sur", "Kasibu", "Kayapa", "Quezon", "Santa Fe", "Solano", "Villaverde"],
+        "Quirino": ["Aglipay", "Cabarroguis", "Diffun", "Maddela", "Nagtipunan", "Saguday"]
+    },
+    "Central Luzon (Region III)": {
+        "Aurora": ["Baler", "Casiguran", "Dilasag", "Dinalungan", "Dingalan", "Dipaculao", "Maria Aurora", "San Luis"],
+        "Bataan": ["Abucay", "Bagac", "Balanga City", "Dinalupihan", "Hermosa", "Limay", "Mariveles", "Morong", "Orani", "Orion", "Pilar", "Samal"],
+        "Bulacan": ["Angat", "Balagtas", "Baliuag", "Bocaue", "Bulacan", "Bustos", "Calumpit", "Malolos City", "Meycauayan City", "San Jose del Monte City", "Doña Remedios Trinidad", "Guiguinto", "Hagonoy", "Marilao", "Norzagaray", "Obando", "Pandi", "Paombong", "Plaridel", "Pulilan", "San Ildefonso", "San Miguel", "San Rafael", "Santa Maria"],
+        "Nueva Ecija": ["Aliaga", "Bongabon", "Cabiao", "Carranglan", "Cabanatuan City", "Gapan City", "Palayan City", "Cuyapo", "Gabaldon", "General Mamerto Natividad", "General Tinio", "Guimba", "Jaen", "Laur", "Licab", "Llanera", "Lupao", "Nampicuan", "Pantabangan", "Peñaranda", "Quezon", "Rizal", "San Antonio", "San Isidro", "San Jose City", "San Leonardo", "Santa Rosa", "Santo Domingo", "Science City of Muñoz", "Talavera", "Talugtug", "Zaragoza"],
+        "Pampanga": ["Apalit", "Arayat", "Bacolor", "Candaba", "Angeles City", "San Fernando City", "Floridablanca", "Guagua", "Lubao", "Mabalacat City", "Macabebe", "Magalang", "Masantol", "Mexico", "Minalin", "Porac", "San Luis", "San Simon", "Santa Ana", "Santa Rita", "Santo Tomas", "Sasmuan"],
+        "Tarlac": ["Anao", "Bamban", "Camiling", "Capas", "Tarlac City", "Concepcion", "Gerona", "La Paz", "Mayantoc", "Moncada", "Paniqui", "Pura", "Ramos", "San Clemente", "San Jose", "San Manuel", "Santa Ignacia", "Victoria"],
+        "Zambales": ["Botolan", "Cabangan", "Candelaria", "Castillejos", "Olongapo City", "Iba", "Masinloc", "Palauig", "San Antonio", "San Felipe", "San Marcelino", "San Narciso", "Santa Cruz", "Subic"]
+    },
     "CALABARZON (Region IV-A)": {
         "Batangas": ["Agoncillo", "Alitagtag", "Balayan", "Balete", "Batangas City", "Bauan", "Calaca", "Calatagan", "Lipa City", "Tanauan City", "Cuenca", "Ibaan", "Laurel", "Lemery", "Lian", "Lobo", "Mabini", "Malvar", "Mataasnakahoy", "Nasugbu", "Padre Garcia", "Rosario", "San Jose", "San Juan", "San Luis", "San Nicolas", "San Pascual", "Santa Teresita", "Santo Tomas", "Taal", "Talisay", "Taysan", "Tingloy", "Tuy"],
         "Cavite": ["Alfonso", "Amadeo", "Carmona", "Bacoor City", "Cavite City", "Dasmariñas City", "General Trias City", "Imus City", "Tagaytay City", "Trece Martires City", "General Mariano Alvarez", "General Emilio Aguinaldo", "Indang", "Kawit", "Magallanes", "Maragondon", "Mendez", "Naic", "Noveleta", "Rosario", "Silang", "Tanza", "Ternate"],
@@ -90,161 +115,530 @@ const PH_LOCATIONS = {
         "Quezon": ["Agdangan", "Alabat", "Atimonan", "Buenavista", "Burdeos", "Calauag", "Candelaria", "Catanauan", "Lucena City", "Tayabas City", "Dolores", "General Luna", "General Nakar", "Guinayangan", "Gumaca", "Infanta", "Jomalig", "Lopez", "Lucban", "Macalelon", "Mauban", "Mulanay", "Padre Burgos", "Pagbilao", "Panukulan", "Patnanungan", "Perez", "Pitogo", "Plaridel", "Polillo", "Quezon", "Real", "Sampaloc", "San Andres", "San Antonio", "San Francisco (Aurora)", "San Narciso", "Sariaya", "Tagkawayan", "Tiaong", "Unisan"],
         "Rizal": ["Angono", "Baras", "Binangonan", "Cainta", "Cardona", "Antipolo City", "Jala-Jala", "Morong", "Pililla", "Rodriguez", "San Mateo", "Tanay", "Taytay", "Teresa"]
     },
+    "MIMAROPA Region (Region IV-B)": {
+        "Marinduque": ["Boac", "Buenavista", "Gasan", "Mogpog", "Santa Cruz", "Torrijos"],
+        "Occidental Mindoro": ["Abra de Ilog", "Calintaan", "Looc", "Lubang", "Magsaysay", "Mamburao", "Paluan", "Rizal", "Sablayan", "San Jose", "Santa Cruz"],
+        "Oriental Mindoro": ["Baco", "Bansud", "Bongabong", "Bulalacao", "Calapan City", "Gloria", "Mansalay", "Naujan", "Pinamalayan", "Pola", "Puerto Galera", "Roxas", "San Teodoro", "Socorro", "Victoria"],
+        "Palawan": ["Aborlan", "Agutaya", "Araceli", "Balabac", "Bataraza", "Brooke's Point", "Busuanga", "Cagayancillo", "Puerto Princesa City", "Coron", "Culion", "Cuyo", "Dumaran", "El Nido", "Kalayaan", "Linapacan", "Magsaysay", "Narra", "Quezon", "Rizal", "Roxas", "San Vicente", "Sofronio Española", "Taytay"],
+        "Romblon": ["Alcantara", "Banton", "Cajidiocan", "Calatrava", "Concepcion", "Corcuera", "Ferrol", "Looc", "Magdiwang", "Odiongan", "Romblon", "San Agustin", "San Andres", "San Fernando", "San Jose", "Santa Fe", "Santa Maria"]
+    },
+    "Bicol Region (Region V)": {
+        "Albay": ["Bacacay", "Camalig", "Legazpi City", "Ligao City", "Tabaco City", "Daraga", "Guinobatan", "Jovellar", "Libon", "Malilipot", "Malinao", "Manito", "Oas", "Pio Duran", "Polangui", "Rapu-Rapu", "Santo Domingo", "Tiwi"],
+        "Camarines Norte": ["Basud", "Capalonga", "Daet", "Jose Panganiban", "Labo", "Mercedes", "Paracale", "San Lorenzo Ruiz", "San Vicente", "Santa Elena", "Talisay", "Vinzons"],
+        "Camarines Sur": ["Baao", "Balatan", "Bato", "Bombon", "Buhi", "Bula", "Cabusao", "Calabanga", "Camaligan", "Canaman", "Caramoan", "Iriga City", "Naga City", "Del Gallego", "Gainza", "Garchitorena", "Goa", "Lagonoy", "Libmanan", "Lupi", "Magarao", "Milaor", "Minalabac", "Nabua", "Ocampo", "Pamplona", "Pasacao", "Pili", "Presentacion", "Ragay", "Sagñay", "San Fernando", "San Jose", "Sipocot", "Siruma", "Tigaon", "Tinambac"],
+        "Catanduanes": ["Bagamanoc", "Baras", "Bato", "Caramoran", "Gigmoto", "Pandan", "Panganiban", "San Andres", "San Miguel", "Viga", "Virac"],
+        "Masbate": ["Aroroy", "Baleno", "Balud", "Batuan", "Cataingan", "Cawayan", "Masbate City", "Claveria", "Dimasalang", "Esperanza", "Mandaon", "Milagros", "Mobo", "Monreal", "Palanas", "Pio V. Corpuz", "Placer", "San Fernando", "San Jacinto", "San Pascual", "Uson"],
+        "Sorsogon": ["Barcelona", "Bulan", "Bulusan", "Casiguran", "Castilla", "Sorsogon City", "Donsol", "Gubat", "Irosin", "Juban", "Magallanes", "Matnog", "Pilar", "Prieto Diaz", "Santa Magdalena"]
+    },
+    "Western Visayas (Region VI)": {
+        "Aklan": ["Altavas", "Balete", "Banga", "Batan", "Buruanga", "Ibajay", "Kalibo", "Lezo", "Libacao", "Madalag", "Makato", "Malay", "Malinao", "Nabas", "New Washington", "Numancia", "Tangalan"],
+        "Antique": ["Anini-y", "Barbaza", "Belison", "Bugasong", "Caluya", "Culasi", "Hamtic", "Laua-an", "Libertad", "Pandan", "Patnongon", "San Jose", "San Remigio", "Sebaste", "Sibalom", "Tibiao", "Tobias Fornier", "Valderrama Capiz"],
+        "Capiz": ["Roxas City", "Cuartero", "Dao", "Dumalag", "Dumarao", "Ivisan", "Jamindan", "Ma-Ayon", "Mambusao", "Panay", "Panitan", "Pilar", "Pontevedra", "President Roxas", "Sapi-An", "Sigma", "Tapaz"],
+        "Iloilo": ["Ajuy", "Alimodian", "Anilao", "Badiangan", "Balasan", "Banate", "Barotac Nuevo", "Barotac Viejo", "Batad", "Bingawan", "Cabatuan", "Calinog", "Carles", "Iloilo City", "Passi City", "Concepcion", "Dingle", "Dueñas", "Dumangas", "Estancia", "Guimbal", "Igbaras", "Janiuay", "Lambunao", "Leganes", "Lemery", "Leon", "Maasin", "Miagao", "Mina", "New Lucena", "Oton", "Pavia", "Pototan", "San Dionisio", "San Enrique", "San Joaquin", "San Miguel", "San Rafael", "Santa Barbara", "Sara", "Tigbauan", "Tubungan", "Zarraga"],
+        "Guimaras": ["Buenavista", "Jordan", "Nueva Valencia", "San Lorenzo", "Sibunag"]
+    },
+    "Negros Island Region (NIR)": {
+        "Negros Occidental": ["Binalbagan", "Calatrava", "Candoni", "Cauayan", "Bacolod City", "Bago City", "Cadiz City", "Escalante City", "Himamaylan City", "Kabankalan City", "La Carlota City", "Sagay City", "San Carlos City", "Silay City", "Sipalay City", "Talisay City", "Victorias City", "Enrique B. Magalona", "Hinigaran", "Hinoba-an", "Ilog", "Isabela", "La Castellana", "Manapla", "Moises Padilla", "Murcia", "Pontevedra", "Pulupandan", "Salvador Benedicto", "San Enrique", "Toboso", "Valladolid"],
+        "Negros Oriental": ["Amlan", "Ayungon", "Bacong", "Basay", "Bindoy", "Bais City", "Bayawan City", "Canlaon City", "Dumaguete City", "Guihulngan City", "Tanjay City", "Dauin", "Jimalalud", "La Libertad", "Mabinay", "Manjuyod", "Pamplona", "San Jose", "Santa Catalina", "Siaton", "Sibulan", "Tayasan", "Valencia", "Vallehermoso", "Zamboanguita"],
+        "Siquijor": ["Enrique Villanueva", "Larena", "Lazi", "Maria", "San Juan", "Siquijor"]
+    },
+    "Central Visayas (Region VII)": {
+        "Bohol": ["Alburquerque", "Alicia", "Anda", "Antequera", "Baclayon", "Balilihan", "Batuan", "Bien Unido", "Bilar", "Buenavista", "Calape", "Candijay", "Carmen", "Catigbian", "Tagbilaran City", "Clarin", "Corella", "Cortes", "Dagohoy", "Danao", "Dauis", "Dimiao", "Duero", "Garcia Hernandez", "Getafe", "Guindulman", "Inabanga", "Jagna", "Lila", "Loay", "Loboc", "Loon", "Mabini", "Maribojoc", "Panglao", "Pilar", "Pres. Carlos P. Garcia", "Sagbayan", "San Isidro", "San Miguel", "Sevilla", "Sierra Bullones", "Sikatuna", "Talibon", "Trinidad", "Tubigon", "Ubay", "Valencia"],
+        "Cebu": ["Alcantara", "Alcoy", "Alegria", "Aloguinsan", "Argao", "Asturias", "Badian", "Balamban", "Bantayan", "Barili", "Boljoon", "Borbon", "Carmen", "Catmon", "Bogo City", "Carcar City", "Cebu City", "Lapu-Lapu City", "Mandaue City", "Naga City", "Talisay City", "Toledo City", "Compostela", "Consolacion", "Cordova", "Daanbantayan", "Dalaguete", "Danao City", "Dumanjug", "Ginatilan", "Liloan", "Madridejos", "Malabuyoc", "Medellin", "Minglanilla", "Moalboal", "Oslob", "Pilar", "Pinamungahan", "Poro", "Ronda", "Samboan", "San Fernando", "San Francisco", "San Remigio", "Santa Fe", "Santander", "Sibonga", "Sogod", "Tabogon", "Tabuelan", "Tuburan", "Tudela"]
+    },
+    "Eastern Visayas (Region VIII)": {
+        "Eastern Samar": ["Arteche", "Balangiga", "Balangkayan", "Borongan City", "Can-avid", "Dolores", "General MacArthur", "Giporlos", "Guiuan", "Hernani", "Jipapad", "Lawaan", "Maslog", "Llorente", "Maydolong", "Mercedes", "Oras", "Quinapondan", "Salcedo", "San Julian", "San Policarpo", "Sulat", "Taft"],
+        "Leyte": ["Abuyog", "Alangalang", "Albuera", "Babatngon", "Barugo", "Bato", "Burauen", "Calubian", "Capoocan", "Carigara", "Baybay City", "Tacloban City", "Dagami", "Dulag", "Hilongos", "Hindang", "Inopacan", "Isabel", "Jaro", "Javier", "Julita", "Kananga", "La Paz", "Leyte", "MacArthur", "Mahaplag", "Matag-ob", "Matalom", "Mayorga", "Merida", "Ormoc City", "Palo", "Palompon", "Pastrana", "San Isidro", "San Miguel", "Santa Fe", "Tabango", "Tabontabon", "Tanauan", "Tolosa", "Tunga", "Villaba"],
+        "Northern Samar": ["Allen", "Biri", "Bobon", "Capul", "Catarman", "Catubig", "Gamay", "Laoang", "Lapinig", "Las Navas", "Lavezares", "Lope de Vega", "Mapanas", "Mondragon", "Palapag", "Pambujan", "Rosario", "San Antonio", "San Isidro", "San Jose", "San Roque", "San Vicente", "Silvino Lobos", "Victoria"],
+        "Samar": ["Almagro", "Basey", "Calbiga", "Calbayog City", "Catbalogan City", "Daram", "Gandara", "Hinabangan", "Jiabong", "Marabut", "Matuguinao", "Motiong", "Pagsanghan", "Paranas", "Pinabacdao", "San Jorge", "San Jose de Buan", "San Sebastian", "Santa Margarita", "Santa Rita", "Santo Niño", "Tagapul-an", "Talalora", "Tarangnan", "Villareal", "Zumarraga"],
+        "Southern Leyte": ["Anahawan", "Bontoc", "Maasin City", "Hinunangan", "Hinundayan", "Libagon", "Liloan", "Limasawa", "Macrohon", "Malitbog", "Padre Burgos", "Pintuyan", "Saint Bernard", "San Francisco", "San Juan", "San Ricardo", "Silago", "Sogod", "Tomas Oppus"],
+        "Biliran": ["Almeria", "Biliran", "Cabucgayan", "Caibiran", "Culaba", "Kawayan", "Maripipi", "Naval"]
+    },
+    "Zamboanga Peninsula (Region IX)": {
+        "Sulu": ["Hadji Panglima Tahil", "Indanan", "Jolo", "Kalingalan Caluang", "Lugus", "Luuk", "Maimbung", "Old Panamao", "Omar", "Pandami", "Panglima Estino", "Pangutaran", "Parang", "Pata", "Patikul", "Siasi", "Talipao", "Tapul", "Tongkil"],
+        "Zamboanga del Norte": ["Bacungan (Leon T. Postigo)", "Baliguian", "Dapitan City", "Dipolog City", "Godod", "Gutalac", "Jose Dalman", "Kalawit", "Katipunan", "La Libertad", "Labason", "Liloy", "Manukan", "Mutia", "Piñan", "Polanco", "Pres. Manuel A. Roxas", "Rizal", "Salug", "Sergio Osmeña Sr.", "Siayan", "Sibuco", "Sibutad", "Sindangan", "Siocon", "Sirawai", "Tampilisan"],
+        "Zamboanga del Sur": ["Aurora", "Bayog", "Pagadian City", "Zamboanga City", "Dimataling", "Dinas", "Dumalinao", "Dumingag", "Guipos", "Josefina", "Kumalarang", "Labangan", "Lakewood", "Lapuyan", "Mahayag", "Margosatubig", "Midsalip", "Molave", "Pitogo", "Ramon Magsaysay", "San Miguel", "San Pablo", "Sominot", "Tabina", "Tambulig", "Tigbao", "Tukuran", "Vincenzo A. Sagun"],
+        "Zamboanga Sibugay": ["Alicia", "Buug", "Diplahan", "Imelda", "Ipil", "Kabasalan", "Mabuhay", "Malangas", "Naga", "Olutanga", "Payao", "Roseller Lim", "Siay", "Talusan", "Titay", "Tungawan"],
+        "Basilan": ["Isabela City"]
+    },
+    "Northern Mindanao (Region X)": {
+        "Bukidnon": ["Baungon", "Cabanglasan", "Malaybalay City", "Valencia City", "Damulog", "Dangcagan", "Don Carlos", "Impasug-ong", "Kadingilan", "Kalilangan", "Kibawe", "Kitaotao", "Lantapan", "Libona", "Malitbog", "Manolo Fortich", "Maramag", "Pangantucan", "Quezon", "San Fernando", "Sumilao", "Talakag"],
+        "Camiguin": ["Catarman", "Guinsiliban", "Mahinog", "Mambajao", "Sagay"],
+        "Lanao del Norte": ["Bacolod", "Baloi", "Baroy", "Iligan City", "Kapatagan", "Kauswagan", "Kolambugan", "Lala", "Linamon", "Magsaysay", "Maigo", "Matungao", "Munai", "Nunungan", "Pantao Ragat", "Pantar", "Poona Piagapo", "Salvador", "Sapad", "Sultan Naga Dimaporo", "Tagoloan", "Tangcal", "Tubod"],
+        "Misamis Occidental": ["Aloran", "Baliangao", "Bonifacio", "Calamba", "Oroquieta City", "Ozamiz City", "Tangub City", "Clarin", "Concepcion", "Don Victoriano", "Jimenez", "Lopez Jaena", "Panaon", "Plaridel", "Sapang Dalaga", "Sinacaban", "Tudela"],
+        "Misamis Oriental": ["Alubijid", "Balingasag", "Balingoan", "Binuangan", "Cagayan de Oro City", "El Salvador City", "Gingoog City", "Claveria", "Gitagum", "Initao", "Jasaan", "Kinoguitan", "Lagonglong", "Laguindingan", "Libertad", "Lugait", "Magsaysay", "Manticao", "Medina", "Naawan", "Opol", "Salay", "Sugbongcogon", "Tagoloan", "Talisayan", "Villanueva"]
+    },
     "Davao Region (Region XI)": {
-        "Davao del Sur": ["Bansalan", "Davao City", "Digos City", "Hagonoy", "Kiblawan", "Magsaysay", "Malalag", "Matanao", "Padada", "Santa Cruz", "Sulop"]
+        "Davao del Norte": ["Asuncion", "Braulio E. Dujali", "Carmen", "Panabo City", "Tagum City", "Island Garden City of Samal", "Kapalong", "New Corella", "Sawata", "Santo Tomas", "Talaingod"],
+        "Davao del Sur": ["Bansalan", "Davao City", "Digos City", "Hagonoy", "Kiblawan", "Magsaysay", "Malalag", "Matanao", "Padada", "Santa Cruz", "Sulop"],
+        "Davao Oriental": ["Baganga", "Banaybanay", "Boston", "Caraga", "Cateel", "Mati City", "Governor Generoso", "Lupon", "Manay", "San Isidro", "Tarragona"],
+        "Davao de Oro": ["Compostela", "Laak", "Mabini", "Maco", "Maragusan", "Mawab", "Monkayo", "Montevista", "Nabunturan", "New Bataan", "Pantukan"],
+        "Davao Occidental": ["Don Marcelino", "Jose Abad Santos", "Malita", "Santa Maria", "Sarangani"]
+    },
+    "SOCCSKSARGEN (Region XII)": {
+        "Cotabato": ["Alamada", "Aleosan", "Antipas", "Arakan", "Banisilan", "Carmen", "Kidapawan City", "Kabacan", "Libungan", "Mlang", "Magpet", "Makilala", "Matalam", "Midsayap", "Pigcawayan", "Pikit", "President Roxas", "Tulunan"],
+        "South Cotabato": ["Banga", "General Santos City", "Koronadal City", "Lake Sebu", "Norala", "Polomolok", "Santo Niño", "Surallah", "Tboli", "Tampakan", "Tantangan", "Tupi"],
+        "Sultan Kudarat": ["Bagumbayan", "Tacurong City", "Columbio", "Esperanza", "Isulan", "Kalamansig", "Lambayong", "Lebak", "Lutayan", "Palimbang", "President Quirino", "Senator Ninoy Aquino"],
+        "Sarangani": ["Alabel", "Glan", "Kiamba", "Maasim", "Maitum", "Malapatan", "Malungon"]
+    },
+    "Caraga (Region XIII)": {
+        "Agusan del Norte": ["Buenavista", "Carmen", "Butuan City", "Cabadbaran City", "Jabonga", "Kitcharao", "Las Nieves", "Magallanes", "Nasipit", "Remedios T. Romualdez", "Santiago", "Tubay"],
+        "Agusan del Sur": ["Bunawan", "Bayugan City", "Esperanza", "La Paz", "Loreto", "Prosperidad", "Rosario", "San Francisco", "San Luis", "Santa Josefa", "Sibagat", "Talacogon", "Trento", "Veruela"],
+        "Surigao del Norte": ["Alegria", "Bacuag", "Burgos", "Surigao City", "Claver", "Dapa", "Del Carmen", "General Luna", "Gigaquit", "Mainit", "Malimono", "Pilar", "Placer", "San Benito", "San Francisco (Anao-aon)", "San Isidro", "San Jose", "Santa Monica", "Sison", "Socorro", "Tagana-an", "Tubod"],
+        "Surigao del Sur": ["Barobo", "Bayabas", "Cagwait", "Cantilan", "Carmen", "Carrascal", "Bislig City", "Tandag City", "Cortes", "Hinatuan", "Lanuza", "Lianga", "Lingig", "Madrid", "Marihatag", "San Agustin", "San Miguel", "Tagbina", "Tago"],
+        "Dinagat Islands": ["Basilisa", "Cagdianao", "Dinagat", "Libjo", "Loreto", "San Jose", "Tubajon"]
+    },
+    "Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)": {
+        "Basilan": ["Akbar", "Al-Barka", "Lamitan City", "Hadji Mohammad Ajul", "Hadji Muhtamad", "Isabela", "Lantawan", "Maluso", "Sumisip", "Tabuan-Lasa", "Tipo-Tipo", "Tuburan", "Ungkaya Pukan"],
+        "Lanao del Sur": ["Amai Manabilang", "Bacolod-Kalawi", "Balabagan", "Balindong", "Bayang", "Binidayan", "Buadiposo-Buntong", "Bubong", "Butig", "Calanogas", "Marawi City", "Ditsaan-Ramain", "Ganassi", "Kapai", "Kapatagan", "Lumba-Bayabao", "Lumbaca-Unayan", "Lumbatan", "Lumbayanague", "Madalum", "Madamba", "Maguing", "Malabang", "Marantao", "Marogong", "Masiu", "Mulondo", "Pagayawan", "Piagapo", "Picong", "Poona Bayabao", "Pualas", "Saguiaran", "Sultan Dumalondong", "Tagoloan II", "Tamparan", "Taraka", "Tubaran", "Tugaya", "Wao"],
+        "Maguindanao del Norte": ["Barira", "Buldon", "Datu Blah T. Sinsuat", "Datu Odin Sinsuat", "Kabuntalan", "Matanog", "Northern Kabuntalan", "Parang", "Sultan Kudarat (Nuling)", "Sultan Mastura", "Talitay", "Upi Maguindanao del Sur"],
+        "Maguindanao del Sur": ["Ampatuan", "Buluan", "Datu Abdullah Sangki", "Datu Anggal Midtimbang", "Datu Hoffer Ampatuan", "Datu Paglas", "Datu Piang", "Datu Salibo", "Datu Saudi-Ampatuan", "Datu Unsay", "General S. K. Pendatun", "Guindulungan", "Mamasapano", "Mangudadatu", "Pagagawan", "Pagalungan", "Paglat", "Pandag", "Rajah Buayan", "Shariff Aguak", "Shariff Saydona Mustapha", "South Upi", "Sultan sa Barongis", "Talayan"],
+        "Tawi-Tawi": ["Bongao", "Languyan", "Mapun", "Panglima Sugala", "Sapa-Sapa", "Sibutu", "Simunul", "Sitangkai", "South Ubian", "Tandubas", "Turtle Islands"]
     }
 };
 
+let cart = [];
+let activeCategory = 'all';
+let currentModalProductId = null;
+let activeChatEmail = null;
+let currentFarmerViewMode = 'buy'; // 'buy' or 'sell'
+
 // INITIALIZATION
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
+    initStorage();
     initAddressDropdowns();
-    await initFirebaseRealtimeListeners();
     checkSession();
 });
 
-// INITIALIZE REALTIME LISTENERS & DEMO DATA SEEDING
-async function initFirebaseRealtimeListeners() {
-    if (isFirebaseConfigured && db) {
-        db.collection('users').onSnapshot(snapshot => {
-            usersState = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            localStorage.setItem(USERS_KEY, JSON.stringify(usersState));
-            refreshCurrentView();
-        });
-
-        db.collection('products').onSnapshot(snapshot => {
-            productsState = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            localStorage.setItem(PRODUCTS_KEY, JSON.stringify(productsState));
-            refreshCurrentView();
-        });
-
-        db.collection('orders').onSnapshot(snapshot => {
-            ordersState = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            localStorage.setItem(ORDERS_KEY, JSON.stringify(ordersState));
-            refreshCurrentView();
-        });
-
-        db.collection('reviews').onSnapshot(snapshot => {
-            reviewsState = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            localStorage.setItem(REVIEWS_KEY, JSON.stringify(reviewsState));
-            refreshCurrentView();
-        });
-
-        db.collection('qa').onSnapshot(snapshot => {
-            qaState = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            localStorage.setItem(QA_KEY, JSON.stringify(qaState));
-            refreshCurrentView();
-        });
-
-        db.collection('messages').onSnapshot(snapshot => {
-            messagesState = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            localStorage.setItem(MESSAGES_KEY, JSON.stringify(messagesState));
-            if (activeChatEmail) renderChatThread(activeChatEmail);
-            renderConversationsList();
-            updateUnreadMessagesCount();
-        });
-
-        seedFirebaseDefaultData();
-    } else {
-        initLocalStorageFallback();
-    }
-}
-
-function initLocalStorageFallback() {
+// INITIALIZE LOCAL STORAGE WITH PRE-POPULATED SAMPLE DATA
+function initStorage() {
     if (!localStorage.getItem(USERS_KEY)) {
-        const initialUsers = getInitialUsersData();
+        const initialUsers = [
+            // 1 Transportation Company
+            {
+                name: "Express Crop Transport",
+                email: "transpo@test.com",
+                password: "123",
+                role: "transpo_company",
+                phone: "09171112222",
+                region: "CALABARZON (Region IV-A)",
+                province: "Batangas",
+                city: "Lipa City",
+                street: "Logistics Hub 1",
+                address: "Lipa City, Batangas, CALABARZON (Region IV-A)",
+                desc: "Regional agricultural cold-chain and courier logistics provider."
+            },
+
+            // 5 Farmers in 5 Distinct Provinces
+            {
+                name: "Maria Farmer",
+                email: "farmer1@test.com",
+                password: "123",
+                role: "farmer",
+                phone: "09171234561",
+                farmName: "Batangas Organic Farms",
+                region: "CALABARZON (Region IV-A)",
+                province: "Batangas",
+                city: "Lipa City",
+                street: "Barangay Marawoy",
+                address: "Barangay Marawoy, Lipa City, Batangas, CALABARZON (Region IV-A)",
+                desc: "Organic vegetable farm in volcanic Batangas soil specializing in root crops."
+            },
+            {
+                name: "Juan Farmer",
+                email: "farmer2@test.com",
+                password: "123",
+                role: "farmer",
+                phone: "09171234562",
+                farmName: "Highland Greens Cavite",
+                region: "CALABARZON (Region IV-A)",
+                province: "Cavite",
+                city: "Dasmariñas City",
+                street: "Pala-Pala Road",
+                address: "Pala-Pala Road, Dasmariñas City, Cavite, CALABARZON (Region IV-A)",
+                desc: "Highland leafy greens, lettuce, and cool-climate vegetables."
+            },
+            {
+                name: "Pedro Farmer",
+                email: "farmer3@test.com",
+                password: "123",
+                role: "farmer",
+                phone: "09171234563",
+                farmName: "Laguna Fresh Produce",
+                region: "CALABARZON (Region IV-A)",
+                province: "Laguna",
+                city: "Santa Rosa City",
+                street: "Greenfields Estate",
+                address: "Greenfields Estate, Santa Rosa City, Laguna, CALABARZON (Region IV-A)",
+                desc: "Hydroponic sweet corn, berries, and greenhouse crops."
+            },
+            {
+                name: "Mateo Farmer",
+                email: "farmer4@test.com",
+                password: "123",
+                role: "farmer",
+                phone: "09171234564",
+                farmName: "Pangasinan Crop Masters",
+                region: "Ilocos Region (Region I)",
+                province: "Pangasinan",
+                city: "Dagupan City",
+                street: "Lucao District",
+                address: "Lucao District, Dagupan City, Pangasinan, Ilocos Region (Region I)",
+                desc: "Aromatic native garlic, red onions, and lowland vegetables."
+            },
+            {
+                name: "Rosa Farmer",
+                email: "farmer5@test.com",
+                password: "123",
+                role: "farmer",
+                phone: "09171234565",
+                farmName: "Davao Fruit Orchards",
+                region: "Davao Region (Region XI)",
+                province: "Davao del Sur",
+                city: "Davao City",
+                street: "Calinan District",
+                address: "Calinan District, Davao City, Davao del Sur, Davao Region (Region XI)",
+                desc: "Premium bananas, durian, and export-quality tropical fruits."
+            },
+
+            // 5 Buyers in 5 Distinct Provinces
+            {
+                name: "Ana Santos",
+                email: "buyer1@test.com",
+                password: "123",
+                role: "consumer",
+                phone: "09189876541",
+                region: "CALABARZON (Region IV-A)",
+                province: "Batangas",
+                city: "Lipa City",
+                street: "123 Sabang Street",
+                address: "123 Sabang Street, Lipa City, Batangas, CALABARZON (Region IV-A)",
+                desc: "Fresh produce buyer in Batangas."
+            },
+            {
+                name: "Carlos Cruz",
+                email: "buyer2@test.com",
+                password: "123",
+                role: "consumer",
+                phone: "09189876542",
+                region: "CALABARZON (Region IV-A)",
+                province: "Cavite",
+                city: "Dasmariñas City",
+                street: "45 Salawag Ave",
+                address: "45 Salawag Ave, Dasmariñas City, Cavite, CALABARZON (Region IV-A)",
+                desc: "Home cook and restaurant manager."
+            },
+            {
+                name: "Elena Reyes",
+                email: "buyer3@test.com",
+                password: "123",
+                role: "consumer",
+                phone: "09189876543",
+                region: "CALABARZON (Region IV-A)",
+                province: "Laguna",
+                city: "Santa Rosa City",
+                street: "88 Nuvali Blvd",
+                address: "88 Nuvali Blvd, Santa Rosa City, Laguna, CALABARZON (Region IV-A)",
+                desc: "Organic food advocate."
+            },
+            {
+                name: "Fernando Poe",
+                email: "buyer4@test.com",
+                password: "123",
+                role: "consumer",
+                phone: "09189876544",
+                region: "Ilocos Region (Region I)",
+                province: "Pangasinan",
+                city: "Dagupan City",
+                street: "12 Arellano Street",
+                address: "12 Arellano Street, Dagupan City, Pangasinan, Ilocos Region (Region I)",
+                desc: "Wholesale food distributor."
+            },
+            {
+                name: "Grace Tan",
+                email: "buyer5@test.com",
+                password: "123",
+                role: "consumer",
+                phone: "09189876545",
+                region: "Davao Region (Region XI)",
+                province: "Davao del Sur",
+                city: "Davao City",
+                street: "77 Bajada Road",
+                address: "77 Bajada Road, Davao City, Davao del Sur, Davao Region (Region XI)",
+                desc: "Fresh fruit and smoothie bar owner."
+            },
+
+            // 10 Riders (2 Riders per Province across the 5 Provinces)
+            {
+                name: "Ricardo Dalisay",
+                email: "rider1@test.com",
+                password: "123",
+                role: "transpo_rider",
+                phone: "09191110001",
+                companyName: "Express Crop Transport",
+                companyEmail: "transpo@test.com",
+                status: "verified",
+                dutyStatus: "Online / Available",
+                region: "CALABARZON (Region IV-A)",
+                province: "Batangas",
+                city: "Lipa City",
+                street: "Rider Station 1",
+                address: "Lipa City, Batangas, CALABARZON (Region IV-A)"
+            },
+            {
+                name: "Benigno Ramos",
+                email: "rider2@test.com",
+                password: "123",
+                role: "transpo_rider",
+                phone: "09191110002",
+                companyName: "Express Crop Transport",
+                companyEmail: "transpo@test.com",
+                status: "verified",
+                dutyStatus: "Online / Available",
+                region: "CALABARZON (Region IV-A)",
+                province: "Batangas",
+                city: "Lipa City",
+                street: "Rider Station 2",
+                address: "Lipa City, Batangas, CALABARZON (Region IV-A)"
+            },
+            {
+                name: "Crisanto Cruz",
+                email: "rider3@test.com",
+                password: "123",
+                role: "transpo_rider",
+                phone: "09191110003",
+                companyName: "Express Crop Transport",
+                companyEmail: "transpo@test.com",
+                status: "verified",
+                dutyStatus: "Online / Available",
+                region: "CALABARZON (Region IV-A)",
+                province: "Cavite",
+                city: "Dasmariñas City",
+                street: "Rider Station 3",
+                address: "Dasmariñas City, Cavite, CALABARZON (Region IV-A)"
+            },
+            {
+                name: "Danilo Santos",
+                email: "rider4@test.com",
+                password: "123",
+                role: "transpo_rider",
+                phone: "09191110004",
+                companyName: "Express Crop Transport",
+                companyEmail: "transpo@test.com",
+                status: "verified",
+                dutyStatus: "Online / Available",
+                region: "CALABARZON (Region IV-A)",
+                province: "Cavite",
+                city: "Dasmariñas City",
+                street: "Rider Station 4",
+                address: "Dasmariñas City, Cavite, CALABARZON (Region IV-A)"
+            },
+            {
+                name: "Eduardo Lim",
+                email: "rider5@test.com",
+                password: "123",
+                role: "transpo_rider",
+                phone: "09191110005",
+                companyName: "Express Crop Transport",
+                companyEmail: "transpo@test.com",
+                status: "verified",
+                dutyStatus: "Online / Available",
+                region: "CALABARZON (Region IV-A)",
+                province: "Laguna",
+                city: "Santa Rosa City",
+                street: "Rider Station 5",
+                address: "Santa Rosa City, Laguna, CALABARZON (Region IV-A)"
+            },
+            {
+                name: "Francisco Gomez",
+                email: "rider6@test.com",
+                password: "123",
+                role: "transpo_rider",
+                phone: "09191110006",
+                companyName: "Express Crop Transport",
+                companyEmail: "transpo@test.com",
+                status: "verified",
+                dutyStatus: "Online / Available",
+                region: "CALABARZON (Region IV-A)",
+                province: "Laguna",
+                city: "Santa Rosa City",
+                street: "Rider Station 6",
+                address: "Santa Rosa City, Laguna, CALABARZON (Region IV-A)"
+            },
+            {
+                name: "Gabriel Mercado",
+                email: "rider7@test.com",
+                password: "123",
+                role: "transpo_rider",
+                phone: "09191110007",
+                companyName: "Express Crop Transport",
+                companyEmail: "transpo@test.com",
+                status: "verified",
+                dutyStatus: "Online / Available",
+                region: "Ilocos Region (Region I)",
+                province: "Pangasinan",
+                city: "Dagupan City",
+                street: "Rider Station 7",
+                address: "Dagupan City, Pangasinan, Ilocos Region (Region I)"
+            },
+            {
+                name: "Hector Navarro",
+                email: "rider8@test.com",
+                password: "123",
+                role: "transpo_rider",
+                phone: "09191110008",
+                companyName: "Express Crop Transport",
+                companyEmail: "transpo@test.com",
+                status: "verified",
+                dutyStatus: "Online / Available",
+                region: "Ilocos Region (Region I)",
+                province: "Pangasinan",
+                city: "Dagupan City",
+                street: "Rider Station 8",
+                address: "Dagupan City, Pangasinan, Ilocos Region (Region I)"
+            },
+            {
+                name: "Ignacio Reyes",
+                email: "rider9@test.com",
+                password: "123",
+                role: "transpo_rider",
+                phone: "09191110009",
+                companyName: "Express Crop Transport",
+                companyEmail: "transpo@test.com",
+                status: "verified",
+                dutyStatus: "Online / Available",
+                region: "Davao Region (Region XI)",
+                province: "Davao del Sur",
+                city: "Davao City",
+                street: "Rider Station 9",
+                address: "Davao City, Davao del Sur, Davao Region (Region XI)"
+            },
+            {
+                name: "Joaquin Aquino",
+                email: "rider10@test.com",
+                password: "123",
+                role: "transpo_rider",
+                phone: "09191110010",
+                companyName: "Express Crop Transport",
+                companyEmail: "transpo@test.com",
+                status: "verified",
+                dutyStatus: "Online / Available",
+                region: "Davao Region (Region XI)",
+                province: "Davao del Sur",
+                city: "Davao City",
+                street: "Rider Station 10",
+                address: "Davao City, Davao del Sur, Davao Region (Region XI)"
+            }
+        ];
         localStorage.setItem(USERS_KEY, JSON.stringify(initialUsers));
     }
+
     if (!localStorage.getItem(PRODUCTS_KEY)) {
-        const initialProducts = getInitialProductsData();
+        const initialProducts = [
+            {
+                id: 1,
+                farmerEmail: "farmer1@test.com",
+                farmName: "Batangas Organic Farms",
+                farmRegion: "CALABARZON (Region IV-A)",
+                farmProvince: "Batangas",
+                farmCity: "Lipa City",
+                farm: "Batangas Organic Farms (Lipa City, Batangas)",
+                title: "Organic Red Onions (50kg Bag)",
+                category: "Vegetables",
+                price: 920,
+                unit: "sack",
+                stock: 250,
+                grade: "Organic",
+                image: "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cf?w=400",
+                desc: "Hand-sorted organic red onions grown in volcanic Batangas soil. Long shelf life."
+            },
+            {
+                id: 2,
+                farmerEmail: "farmer2@test.com",
+                farmName: "Highland Greens Cavite",
+                farmRegion: "CALABARZON (Region IV-A)",
+                farmProvince: "Cavite",
+                farmCity: "Dasmariñas City",
+                farm: "Highland Greens Cavite (Dasmariñas City, Cavite)",
+                title: "Crisp Iceberg & Romaine Lettuce",
+                category: "Vegetables",
+                price: 120,
+                unit: "kg",
+                stock: 400,
+                grade: "Grade A",
+                image: "https://images.unsplash.com/photo-1556801712-76c8eb07e9f1?w=400",
+                desc: "Hydroponically grown highland lettuce harvested fresh daily from Tagaytay ridge farms."
+            },
+            {
+                id: 3,
+                farmerEmail: "farmer3@test.com",
+                farmName: "Laguna Fresh Produce",
+                farmRegion: "CALABARZON (Region IV-A)",
+                farmProvince: "Laguna",
+                farmCity: "Santa Rosa City",
+                farm: "Laguna Fresh Produce (Santa Rosa City, Laguna)",
+                title: "Fresh Sweet Corn (Per Dozen)",
+                category: "Grains",
+                price: 150,
+                unit: "bag",
+                stock: 180,
+                grade: "Grade B",
+                image: "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400",
+                desc: "Plump, juicy sweet yellow corn picked early morning in Laguna fields."
+            },
+            {
+                id: 4,
+                farmerEmail: "farmer4@test.com",
+                farmName: "Pangasinan Crop Masters",
+                farmRegion: "Ilocos Region (Region I)",
+                farmProvince: "Pangasinan",
+                farmCity: "Dagupan City",
+                farm: "Pangasinan Crop Masters (Dagupan City, Pangasinan)",
+                title: "Aromatic Native White Garlic Crate",
+                category: "Vegetables",
+                price: 450,
+                unit: "crate",
+                stock: 120,
+                grade: "Grade A",
+                image: "https://images.unsplash.com/photo-1540148426945-6cf22a6b2383?w=400",
+                desc: "Aromatic native Pangasinan garlic with high oil content and pungent flavor."
+            },
+            {
+                id: 5,
+                farmerEmail: "farmer5@test.com",
+                farmName: "Davao Fruit Orchards",
+                farmRegion: "Davao Region (Region XI)",
+                farmProvince: "Davao del Sur",
+                farmCity: "Davao City",
+                farm: "Davao Fruit Orchards (Davao City, Davao del Sur)",
+                title: "Export Quality Cavendish Bananas",
+                category: "Fruits",
+                price: 85,
+                unit: "kg",
+                stock: 1500,
+                grade: "Grade A",
+                image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400",
+                desc: "Sweet, nutrient-dense Cavendish bananas harvested directly from Mindanao orchards."
+            }
+        ];
         localStorage.setItem(PRODUCTS_KEY, JSON.stringify(initialProducts));
     }
-    usersState = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
-    productsState = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
-    ordersState = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
-    reviewsState = JSON.parse(localStorage.getItem(REVIEWS_KEY)) || [];
-    messagesState = JSON.parse(localStorage.getItem(MESSAGES_KEY)) || [];
-    qaState = JSON.parse(localStorage.getItem(QA_KEY)) || [];
-}
 
-async function seedFirebaseDefaultData() {
-    if (!db) return;
-    const usersSnap = await db.collection('users').get();
-    if (usersSnap.empty) {
-        console.log("🌱 Seeding initial demo users to Firestore...");
-        const initialUsers = getInitialUsersData();
-        const batch = db.batch();
-        initialUsers.forEach(u => {
-            const docRef = db.collection('users').doc(u.email);
-            batch.set(docRef, u);
-        });
-        await batch.commit();
+    if (!localStorage.getItem(REVIEWS_KEY)) {
+        localStorage.setItem(REVIEWS_KEY, JSON.stringify([]));
     }
-
-    const prodSnap = await db.collection('products').get();
-    if (prodSnap.empty) {
-        console.log("🌱 Seeding initial demo products to Firestore...");
-        const initialProducts = getInitialProductsData();
-        const batch = db.batch();
-        initialProducts.forEach(p => {
-            const docRef = db.collection('products').doc(String(p.id));
-            batch.set(docRef, p);
-        });
-        await batch.commit();
+    if (!localStorage.getItem(ORDERS_KEY)) {
+        localStorage.setItem(ORDERS_KEY, JSON.stringify([]));
+    }
+    if (!localStorage.getItem(MESSAGES_KEY)) {
+        localStorage.setItem(MESSAGES_KEY, JSON.stringify([]));
+    }
+    if (!localStorage.getItem(QA_KEY)) {
+        localStorage.setItem(QA_KEY, JSON.stringify([]));
     }
 }
 
-function getInitialUsersData() {
-    return [
-        { name: "Express Crop Transport", email: "transpo@test.com", password: "123", role: "transpo_company", phone: "09171112222", region: "CALABARZON (Region IV-A)", province: "Batangas", city: "Lipa City", street: "Logistics Hub 1", address: "Lipa City, Batangas, CALABARZON (Region IV-A)", desc: "Regional agricultural cold-chain and courier logistics provider." },
-        { name: "Maria Farmer", email: "farmer1@test.com", password: "123", role: "farmer", phone: "09171234561", farmName: "Batangas Organic Farms", region: "CALABARZON (Region IV-A)", province: "Batangas", city: "Lipa City", street: "Barangay Marawoy", address: "Barangay Marawoy, Lipa City, Batangas, CALABARZON (Region IV-A)", desc: "Organic vegetable farm in volcanic Batangas soil specializing in root crops." },
-        { name: "Juan Farmer", email: "farmer2@test.com", password: "123", role: "farmer", phone: "09171234562", farmName: "Highland Greens Cavite", region: "CALABARZON (Region IV-A)", province: "Cavite", city: "Dasmariñas City", street: "Pala-Pala Road", address: "Pala-Pala Road, Dasmariñas City, Cavite, CALABARZON (Region IV-A)", desc: "Highland leafy greens, lettuce, and cool-climate vegetables." },
-        { name: "Pedro Farmer", email: "farmer3@test.com", password: "123", role: "farmer", phone: "09171234563", farmName: "Laguna Fresh Produce", region: "CALABARZON (Region IV-A)", province: "Laguna", city: "Santa Rosa City", street: "Greenfields Estate", address: "Greenfields Estate, Santa Rosa City, Laguna, CALABARZON (Region IV-A)", desc: "Hydroponic sweet corn, berries, and greenhouse crops." },
-        { name: "Mateo Farmer", email: "farmer4@test.com", password: "123", role: "farmer", phone: "09171234564", farmName: "Pangasinan Crop Masters", region: "Ilocos Region (Region I)", province: "Pangasinan", city: "Dagupan City", street: "Lucao District", address: "Lucao District, Dagupan City, Pangasinan, Ilocos Region (Region I)", desc: "Aromatic native garlic, red onions, and lowland vegetables." },
-        { name: "Rosa Farmer", email: "farmer5@test.com", password: "123", role: "farmer", phone: "09171234565", farmName: "Davao Fruit Orchards", region: "Davao Region (Region XI)", province: "Davao del Sur", city: "Davao City", street: "Calinan District", address: "Calinan District, Davao City, Davao del Sur, Davao Region (Region XI)", desc: "Premium bananas, durian, and export-quality tropical fruits." },
-        { name: "Ana Santos", email: "buyer1@test.com", password: "123", role: "consumer", phone: "09189876541", region: "CALABARZON (Region IV-A)", province: "Batangas", city: "Lipa City", street: "123 Sabang Street", address: "123 Sabang Street, Lipa City, Batangas, CALABARZON (Region IV-A)", desc: "Fresh produce buyer in Batangas." },
-        { name: "Carlos Cruz", email: "buyer2@test.com", password: "123", role: "consumer", phone: "09189876542", region: "CALABARZON (Region IV-A)", province: "Cavite", city: "Dasmariñas City", street: "45 Salawag Ave", address: "45 Salawag Ave, Dasmariñas City, Cavite, CALABARZON (Region IV-A)", desc: "Home cook and restaurant manager." },
-        { name: "Elena Reyes", email: "buyer3@test.com", password: "123", role: "consumer", phone: "09189876543", region: "CALABARZON (Region IV-A)", province: "Laguna", city: "Santa Rosa City", street: "88 Nuvali Blvd", address: "88 Nuvali Blvd, Santa Rosa City, Laguna, CALABARZON (Region IV-A)", desc: "Organic food advocate." },
-        { name: "Fernando Poe", email: "buyer4@test.com", password: "123", role: "consumer", phone: "09189876544", region: "Ilocos Region (Region I)", province: "Pangasinan", city: "Dagupan City", street: "12 Arellano Street", address: "12 Arellano Street, Dagupan City, Pangasinan, Ilocos Region (Region I)", desc: "Wholesale food distributor." },
-        { name: "Grace Tan", email: "buyer5@test.com", password: "123", role: "consumer", phone: "09189876545", region: "Davao Region (Region XI)", province: "Davao del Sur", city: "Davao City", street: "77 Bajada Road", address: "77 Bajada Road, Davao City, Davao del Sur, Davao Region (Region XI)", desc: "Fresh fruit and smoothie bar owner." },
-        { name: "Ricardo Dalisay", email: "rider1@test.com", password: "123", role: "transpo_rider", phone: "09191110001", companyName: "Express Crop Transport", companyEmail: "transpo@test.com", status: "verified", dutyStatus: "Online / Available", region: "CALABARZON (Region IV-A)", province: "Batangas", city: "Lipa City", street: "Rider Station 1", address: "Lipa City, Batangas, CALABARZON (Region IV-A)" },
-        { name: "Benigno Ramos", email: "rider2@test.com", password: "123", role: "transpo_rider", phone: "09191110002", companyName: "Express Crop Transport", companyEmail: "transpo@test.com", status: "verified", dutyStatus: "Online / Available", region: "CALABARZON (Region IV-A)", province: "Batangas", city: "Lipa City", street: "Rider Station 2", address: "Lipa City, Batangas, CALABARZON (Region IV-A)" },
-        { name: "Crisanto Cruz", email: "rider3@test.com", password: "123", role: "transpo_rider", phone: "09191110003", companyName: "Express Crop Transport", companyEmail: "transpo@test.com", status: "verified", dutyStatus: "Online / Available", region: "CALABARZON (Region IV-A)", province: "Cavite", city: "Dasmariñas City", street: "Rider Station 3", address: "Dasmariñas City, Cavite, CALABARZON (Region IV-A)" },
-        { name: "Danilo Santos", email: "rider4@test.com", password: "123", role: "transpo_rider", phone: "09191110004", companyName: "Express Crop Transport", companyEmail: "transpo@test.com", status: "verified", dutyStatus: "Online / Available", region: "CALABARZON (Region IV-A)", province: "Cavite", city: "Dasmariñas City", street: "Rider Station 4", address: "Dasmariñas City, Cavite, CALABARZON (Region IV-A)" },
-        { name: "Eduardo Lim", email: "rider5@test.com", password: "123", role: "transpo_rider", phone: "09191110005", companyName: "Express Crop Transport", companyEmail: "transpo@test.com", status: "verified", dutyStatus: "Online / Available", region: "CALABARZON (Region IV-A)", province: "Laguna", city: "Santa Rosa City", street: "Rider Station 5", address: "Santa Rosa City, Laguna, CALABARZON (Region IV-A)" },
-        { name: "Francisco Gomez", email: "rider6@test.com", password: "123", role: "transpo_rider", phone: "09191110006", companyName: "Express Crop Transport", companyEmail: "transpo@test.com", status: "verified", dutyStatus: "Online / Available", region: "CALABARZON (Region IV-A)", province: "Laguna", city: "Santa Rosa City", street: "Rider Station 6", address: "Santa Rosa City, Laguna, CALABARZON (Region IV-A)" },
-        { name: "Gabriel Mercado", email: "rider7@test.com", password: "123", role: "transpo_rider", phone: "09191110007", companyName: "Express Crop Transport", companyEmail: "transpo@test.com", status: "verified", dutyStatus: "Online / Available", region: "Ilocos Region (Region I)", province: "Pangasinan", city: "Dagupan City", street: "Rider Station 7", address: "Dagupan City, Pangasinan, Ilocos Region (Region I)" },
-        { name: "Hector Navarro", email: "rider8@test.com", password: "123", role: "transpo_rider", phone: "09191110008", companyName: "Express Crop Transport", companyEmail: "transpo@test.com", status: "verified", dutyStatus: "Online / Available", region: "Ilocos Region (Region I)", province: "Pangasinan", city: "Dagupan City", street: "Rider Station 8", address: "Dagupan City, Pangasinan, Ilocos Region (Region I)" },
-        { name: "Ignacio Reyes", email: "rider9@test.com", password: "123", role: "transpo_rider", phone: "09191110009", companyName: "Express Crop Transport", companyEmail: "transpo@test.com", status: "verified", dutyStatus: "Online / Available", region: "Davao Region (Region XI)", province: "Davao del Sur", city: "Davao City", street: "Rider Station 9", address: "Davao City, Davao del Sur, Davao Region (Region XI)" },
-        { name: "Joaquin Aquino", email: "rider10@test.com", password: "123", role: "transpo_rider", phone: "09191110010", companyName: "Express Crop Transport", companyEmail: "transpo@test.com", status: "verified", dutyStatus: "Online / Available", region: "Davao Region (Region XI)", province: "Davao del Sur", city: "Davao City", street: "Rider Station 10", address: "Davao City, Davao del Sur, Davao Region (Region XI)" }
-    ];
-}
-
-function getInitialProductsData() {
-    return [
-        { id: 1, farmerEmail: "farmer1@test.com", farmName: "Batangas Organic Farms", farmRegion: "CALABARZON (Region IV-A)", farmProvince: "Batangas", farmCity: "Lipa City", farm: "Batangas Organic Farms (Lipa City, Batangas)", title: "Organic Red Onions (50kg Bag)", category: "Vegetables", price: 920, unit: "sack", stock: 250, grade: "Organic", image: "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cf?w=400", desc: "Hand-sorted organic red onions grown in volcanic Batangas soil. Long shelf life." },
-        { id: 2, farmerEmail: "farmer2@test.com", farmName: "Highland Greens Cavite", farmRegion: "CALABARZON (Region IV-A)", farmProvince: "Cavite", farmCity: "Dasmariñas City", farm: "Highland Greens Cavite (Dasmariñas City, Cavite)", title: "Crisp Iceberg & Romaine Lettuce", category: "Vegetables", price: 120, unit: "kg", stock: 400, grade: "Grade A", image: "https://images.unsplash.com/photo-1556801712-76c8eb07e9f1?w=400", desc: "Hydroponically grown highland lettuce harvested fresh daily from Tagaytay ridge farms." },
-        { id: 3, farmerEmail: "farmer3@test.com", farmName: "Laguna Fresh Produce", farmRegion: "CALABARZON (Region IV-A)", farmProvince: "Laguna", farmCity: "Santa Rosa City", farm: "Laguna Fresh Produce (Santa Rosa City, Laguna)", title: "Fresh Sweet Corn (Per Dozen)", category: "Grains", price: 150, unit: "bag", stock: 180, grade: "Grade B", image: "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400", desc: "Plump, juicy sweet yellow corn picked early morning in Laguna fields." },
-        { id: 4, farmerEmail: "farmer4@test.com", farmName: "Pangasinan Crop Masters", farmRegion: "Ilocos Region (Region I)", farmProvince: "Pangasinan", farmCity: "Dagupan City", farm: "Pangasinan Crop Masters (Dagupan City, Pangasinan)", title: "Aromatic Native White Garlic Crate", category: "Vegetables", price: 450, unit: "crate", stock: 120, grade: "Grade A", image: "https://images.unsplash.com/photo-1540148426945-6cf22a6b2383?w=400", desc: "Aromatic native Pangasinan garlic with high oil content and pungent flavor." },
-        { id: 5, farmerEmail: "farmer5@test.com", farmName: "Davao Fruit Orchards", farmRegion: "Davao Region (Region XI)", farmProvince: "Davao del Sur", farmCity: "Davao City", farm: "Davao Fruit Orchards (Davao City, Davao del Sur)", title: "Export Quality Cavendish Bananas", category: "Fruits", price: 85, unit: "kg", stock: 1500, grade: "Grade A", image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400", desc: "Sweet, nutrient-dense Cavendish bananas harvested directly from Mindanao orchards." }
-    ];
-}
-
-function refreshCurrentView() {
-    const session = JSON.parse(localStorage.getItem(SESSION_KEY));
-    if (!session) return;
-    if (session.role === 'farmer') {
-        if (currentFarmerViewMode === 'buy') renderMarketplace();
-        else renderFarmerDashboard();
-    } else if (session.role === 'transpo_company') {
-        renderTranspoDashboard();
-    } else if (session.role === 'transpo_rider') {
-        renderRiderDashboard();
-    } else {
-        renderMarketplace();
-    }
-}
-
-// ADDRESS DROPDOWN INITIALIZATION
+// ADDRESS DROPDOWN INITIALIZATION & HELPERS
 function initAddressDropdowns() {
     const regSelects = ['reg-region', 'acc-region', 'region-filter'];
     regSelects.forEach(id => {
@@ -264,7 +658,7 @@ function onRegionChange(prefix) {
     const regVal = document.getElementById(`${prefix}-region`).value;
     const provSelect = document.getElementById(`${prefix}-province`);
     const citySelect = document.getElementById(`${prefix}-city`);
-    
+
     provSelect.innerHTML = '<option value="">Select Province...</option>';
     if (citySelect) citySelect.innerHTML = '<option value="">Select City/Municipality...</option>';
 
@@ -404,22 +798,18 @@ function switchFarmerMode(mode) {
     }
 }
 
-async function updateRiderDutyStatus(newStatus) {
+function updateRiderDutyStatus(newStatus) {
     const session = JSON.parse(localStorage.getItem(SESSION_KEY));
     if (!session || session.role !== 'transpo_rider') return;
 
     session.dutyStatus = newStatus;
     localStorage.setItem(SESSION_KEY, JSON.stringify(session));
 
-    if (isFirebaseConfigured && db) {
-        await db.collection('users').doc(session.email).update({ dutyStatus: newStatus });
-    } else {
-        let users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
-        const idx = users.findIndex(u => u.email === session.email);
-        if (idx !== -1) {
-            users[idx].dutyStatus = newStatus;
-            localStorage.setItem(USERS_KEY, JSON.stringify(users));
-        }
+    let users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+    const idx = users.findIndex(u => u.email === session.email);
+    if (idx !== -1) {
+        users[idx].dutyStatus = newStatus;
+        localStorage.setItem(USERS_KEY, JSON.stringify(users));
     }
 
     alert(`Your rider status updated to: ${newStatus}`);
@@ -436,7 +826,7 @@ function handleRoleChange(role) {
 }
 
 function populateRiderCompanyDropdown() {
-    const users = usersState.length > 0 ? usersState : (JSON.parse(localStorage.getItem(USERS_KEY)) || []);
+    const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
     const compSelect = document.getElementById('reg-rider-company');
     compSelect.innerHTML = '';
 
@@ -468,12 +858,12 @@ function switchAuthMode(mode) {
     }
 }
 
-async function handleLogin(e) {
+function handleLogin(e) {
     e.preventDefault();
     const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value.trim();
 
-    const users = usersState.length > 0 ? usersState : (JSON.parse(localStorage.getItem(USERS_KEY)) || []);
+    const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
     const user = users.find(u => u.email === email && u.password === password);
 
     if (!user) {
@@ -490,7 +880,7 @@ async function handleLogin(e) {
     checkSession();
 }
 
-async function handleRegister(e) {
+function handleRegister(e) {
     e.preventDefault();
     const name = document.getElementById('reg-name').value.trim();
     const email = document.getElementById('reg-email').value.trim();
@@ -510,7 +900,7 @@ async function handleRegister(e) {
 
     const fullAddress = `${street}, ${city}, ${province}, ${region}`;
 
-    const users = usersState.length > 0 ? usersState : (JSON.parse(localStorage.getItem(USERS_KEY)) || []);
+    let users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
     if (users.find(u => u.email === email)) {
         alert("An account with this email already exists!");
         return;
@@ -549,12 +939,8 @@ async function handleRegister(e) {
         newUser.dutyStatus = 'Online / Available';
     }
 
-    if (isFirebaseConfigured && db) {
-        await db.collection('users').doc(email).set(newUser);
-    } else {
-        users.push(newUser);
-        localStorage.setItem(USERS_KEY, JSON.stringify(users));
-    }
+    users.push(newUser);
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
 
     if (role === 'transpo_rider') {
         alert(`Registration submitted! Your application has been sent to ${newUser.companyName} for verification.`);
@@ -575,7 +961,7 @@ function handleLogout() {
 function renderMarketplace() {
     const grid = document.getElementById('product-grid');
     grid.innerHTML = '';
-    const products = productsState.length > 0 ? productsState : (JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || []);
+    const products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
     const session = JSON.parse(localStorage.getItem(SESSION_KEY));
 
     const searchKeyword = document.getElementById('global-search').value.toLowerCase();
@@ -668,8 +1054,8 @@ function applyFilters() {
 
 // FARMER PROFILE & STOREFRONT MODAL
 function openFarmerProfileModal(farmerEmail) {
-    const users = usersState.length > 0 ? usersState : (JSON.parse(localStorage.getItem(USERS_KEY)) || []);
-    const products = productsState.length > 0 ? productsState : (JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || []);
+    const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+    const products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
 
     const farmer = users.find(u => u.email === farmerEmail);
     if (!farmer) return;
@@ -718,7 +1104,7 @@ function openFarmerProfileModal(farmerEmail) {
 
 function openFarmerProfileFromModal() {
     if (!currentModalProductId) return;
-    const products = productsState.length > 0 ? productsState : (JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || []);
+    const products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
     const p = products.find(prod => prod.id === currentModalProductId);
     if (p) {
         toggleProductModal();
@@ -733,7 +1119,7 @@ function toggleFarmerProfileModal() {
 // PRODUCT INSPECTION & REVIEWS MODAL
 function openProductModal(productId) {
     currentModalProductId = productId;
-    const products = productsState.length > 0 ? productsState : (JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || []);
+    const products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
     const p = products.find(prod => prod.id === productId);
 
     if (!p) return;
@@ -744,7 +1130,7 @@ function openProductModal(productId) {
     document.getElementById('modal-product-img').src = p.image;
     document.getElementById('modal-product-grade').innerText = p.grade || 'Grade A';
     document.getElementById('modal-product-grade').className = `grade-badge ${gradeObj.badgeClass}`;
-
+    
     document.getElementById('modal-grade-desc-text').innerHTML = `<strong>${gradeObj.label}:</strong> ${gradeObj.description}`;
 
     document.getElementById('modal-product-category').innerText = p.category;
@@ -823,7 +1209,7 @@ function switchModalTab(tabName) {
 
 // REVIEWS & Q&A
 function getProductReviews(productId) {
-    const reviews = reviewsState.length > 0 ? reviewsState : (JSON.parse(localStorage.getItem(REVIEWS_KEY)) || []);
+    const reviews = JSON.parse(localStorage.getItem(REVIEWS_KEY)) || [];
     return reviews.filter(r => Number(r.productId) === Number(productId));
 }
 
@@ -840,8 +1226,12 @@ function getProductRatingSummary(productId) {
 }
 
 function hasPurchasedAndReceived(userEmail, productId) {
-    const orders = ordersState.length > 0 ? ordersState : (JSON.parse(localStorage.getItem(ORDERS_KEY)) || []);
-    return orders.some(o => o.buyerEmail === userEmail && o.status === 'Package Delivered' && o.items && o.items.some(item => Number(item.id) === Number(productId)) );
+    const orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
+    return orders.some(o => 
+        o.buyerEmail === userEmail && 
+        o.status === 'Package Delivered' && 
+        o.items && o.items.some(item => Number(item.id) === Number(productId))
+    );
 }
 
 function renderReviews(productId) {
@@ -869,7 +1259,7 @@ function renderReviews(productId) {
     });
 }
 
-async function handleReviewSubmit(e) {
+function handleReviewSubmit(e) {
     e.preventDefault();
     const session = JSON.parse(localStorage.getItem(SESSION_KEY));
     if (!session) return;
@@ -880,6 +1270,7 @@ async function handleReviewSubmit(e) {
 
     if (!comment) return;
 
+    const reviews = JSON.parse(localStorage.getItem(REVIEWS_KEY)) || [];
     const newReview = {
         id: Date.now(),
         productId,
@@ -890,13 +1281,8 @@ async function handleReviewSubmit(e) {
         date: new Date().toISOString().split('T')[0]
     };
 
-    if (isFirebaseConfigured && db) {
-        await db.collection('reviews').doc(String(newReview.id)).set(newReview);
-    } else {
-        const reviews = JSON.parse(localStorage.getItem(REVIEWS_KEY)) || [];
-        reviews.unshift(newReview);
-        localStorage.setItem(REVIEWS_KEY, JSON.stringify(reviews));
-    }
+    reviews.unshift(newReview);
+    localStorage.setItem(REVIEWS_KEY, JSON.stringify(reviews));
 
     document.getElementById('review-comment').value = '';
     renderReviews(productId);
@@ -907,11 +1293,11 @@ async function handleReviewSubmit(e) {
 function renderQA(productId) {
     const container = document.getElementById('qa-list-container');
     container.innerHTML = '';
-    const allQA = qaState.length > 0 ? qaState : (JSON.parse(localStorage.getItem(QA_KEY)) || []);
+    const allQA = JSON.parse(localStorage.getItem(QA_KEY)) || [];
     const productQA = allQA.filter(q => Number(q.productId) === Number(productId));
 
     const session = JSON.parse(localStorage.getItem(SESSION_KEY));
-    const products = productsState.length > 0 ? productsState : (JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || []);
+    const products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
     const p = products.find(prod => prod.id === productId);
     const isFarmerOwner = session && p && session.email === p.farmerEmail;
 
@@ -953,7 +1339,7 @@ function renderQA(productId) {
     });
 }
 
-async function handleQASubmit(e) {
+function handleQASubmit(e) {
     e.preventDefault();
     const session = JSON.parse(localStorage.getItem(SESSION_KEY));
     if (!session) {
@@ -965,6 +1351,7 @@ async function handleQASubmit(e) {
     const text = input.value.trim();
     if (!text || !currentModalProductId) return;
 
+    const allQA = JSON.parse(localStorage.getItem(QA_KEY)) || [];
     const newQA = {
         id: Date.now(),
         productId: currentModalProductId,
@@ -977,47 +1364,30 @@ async function handleQASubmit(e) {
         answeredDate: null
     };
 
-    if (isFirebaseConfigured && db) {
-        await db.collection('qa').doc(String(newQA.id)).set(newQA);
-    } else {
-        const allQA = JSON.parse(localStorage.getItem(QA_KEY)) || [];
-        allQA.unshift(newQA);
-        localStorage.setItem(QA_KEY, JSON.stringify(allQA));
-    }
+    allQA.unshift(newQA);
+    localStorage.setItem(QA_KEY, JSON.stringify(allQA));
 
     input.value = '';
     renderQA(currentModalProductId);
     alert("Your question has been posted publicly on the product page!");
 }
 
-async function handleQAAnswerSubmit(qaId) {
+function handleQAAnswerSubmit(qaId) {
     const input = document.getElementById(`qa-ans-input-${qaId}`);
     const session = JSON.parse(localStorage.getItem(SESSION_KEY));
     if (!input || !input.value.trim() || !session) return;
 
-    const ansText = input.value.trim();
-    const ansBy = session.name;
-    const ansDate = new Date().toISOString().split('T')[0];
+    let allQA = JSON.parse(localStorage.getItem(QA_KEY)) || [];
+    const idx = allQA.findIndex(q => q.id === qaId);
+    if (idx !== -1) {
+        allQA[idx].answer = input.value.trim();
+        allQA[idx].answeredBy = session.name;
+        allQA[idx].answeredDate = new Date().toISOString().split('T')[0];
 
-    if (isFirebaseConfigured && db) {
-        await db.collection('qa').doc(String(qaId)).update({
-            answer: ansText,
-            answeredBy: ansBy,
-            answeredDate: ansDate
-        });
-    } else {
-        let allQA = JSON.parse(localStorage.getItem(QA_KEY)) || [];
-        const idx = allQA.findIndex(q => q.id === qaId);
-        if (idx !== -1) {
-            allQA[idx].answer = ansText;
-            allQA[idx].answeredBy = ansBy;
-            allQA[idx].answeredDate = ansDate;
-            localStorage.setItem(QA_KEY, JSON.stringify(allQA));
-        }
+        localStorage.setItem(QA_KEY, JSON.stringify(allQA));
+        renderQA(currentModalProductId);
+        alert("Public answer published!");
     }
-
-    renderQA(currentModalProductId);
-    alert("Public answer published!");
 }
 
 // CART & CHECKOUT
@@ -1029,7 +1399,7 @@ function addModalItemToCart() {
 }
 
 function addToCart(productId, qty = 1) {
-    const products = productsState.length > 0 ? productsState : (JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || []);
+    const products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
     const session = JSON.parse(localStorage.getItem(SESSION_KEY));
     const p = products.find(prod => prod.id === productId);
 
@@ -1129,7 +1499,7 @@ function toggleCartModal() {
     document.getElementById('cart-modal').classList.toggle('hidden');
 }
 
-async function processCheckout() {
+function processCheckout() {
     const session = JSON.parse(localStorage.getItem(SESSION_KEY));
     if (!session) {
         alert("Please log in to place an order.");
@@ -1142,7 +1512,7 @@ async function processCheckout() {
     }
 
     const codNotes = document.getElementById('cod-notes').value.trim();
-    let products = productsState.length > 0 ? productsState : (JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || []);
+    let products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
 
     // Deduct stock
     for (let item of cart) {
@@ -1153,15 +1523,10 @@ async function processCheckout() {
                 return;
             }
             p.stock -= item.qty;
-            if (isFirebaseConfigured && db) {
-                await db.collection('products').doc(String(p.id)).update({ stock: p.stock });
-            }
         }
     }
 
-    if (!isFirebaseConfigured) {
-        localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
-    }
+    localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
 
     const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
     const orderId = `ORD-${Math.floor(10000 + Math.random() * 90000)}`;
@@ -1193,13 +1558,9 @@ async function processCheckout() {
         ]
     };
 
-    if (isFirebaseConfigured && db) {
-        await db.collection('orders').doc(orderId).set(newOrder);
-    } else {
-        const orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
-        orders.unshift(newOrder);
-        localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
-    }
+    const orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
+    orders.unshift(newOrder);
+    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
 
     alert(`Order ${orderId} successfully placed via Cash-on-Delivery!
 
@@ -1216,13 +1577,14 @@ function renderFarmerDashboard() {
     const session = JSON.parse(localStorage.getItem(SESSION_KEY));
     if (!session) return;
 
+    // Set inherited farm name & location info
     const farmDisplayNameEl = document.getElementById('p-farm-display-name');
     const farmDisplayLocEl = document.getElementById('p-farm-display-loc');
 
     if (farmDisplayNameEl) farmDisplayNameEl.innerText = session.farmName || `${session.name}'s Organic Farm`;
     if (farmDisplayLocEl) farmDisplayLocEl.innerText = session.address || "Local Farm Location";
 
-    const products = productsState.length > 0 ? productsState : (JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || []);
+    const products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
     const myProducts = products.filter(p => p.farmerEmail === session.email);
 
     const container = document.getElementById('farmer-inventory-list');
@@ -1254,7 +1616,7 @@ function renderFarmerDashboard() {
         container.appendChild(item);
     });
 
-    const orders = ordersState.length > 0 ? ordersState : (JSON.parse(localStorage.getItem(ORDERS_KEY)) || []);
+    const orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
     const farmerOrders = orders.filter(o => o.farmerEmail === session.email);
     const completedOrders = farmerOrders.filter(o => o.status === 'Package Delivered');
     const totalRevenue = completedOrders.reduce((sum, o) => sum + o.subtotal, 0);
@@ -1277,8 +1639,8 @@ function renderRevenueChart() {
     canvas.height = 220;
 
     const session = JSON.parse(localStorage.getItem(SESSION_KEY));
-    const products = productsState.length > 0 ? productsState : (JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || []);
-    const orders = ordersState.length > 0 ? ordersState : (JSON.parse(localStorage.getItem(ORDERS_KEY)) || []);
+    const products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
+    const orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
 
     const myProducts = session ? products.filter(p => p.farmerEmail === session.email) : products;
     const productSalesMap = {};
@@ -1354,7 +1716,7 @@ function renderRevenueChart() {
     });
 }
 
-async function handleNewListing(e) {
+function handleNewListing(e) {
     e.preventDefault();
     const session = JSON.parse(localStorage.getItem(SESSION_KEY));
     if (!session || session.role !== 'farmer') return;
@@ -1383,13 +1745,9 @@ async function handleNewListing(e) {
         image: document.getElementById('p-img').value.trim() || "https://images.unsplash.com/photo-1542838132-92c53300491e?w=400"
     };
 
-    if (isFirebaseConfigured && db) {
-        await db.collection('products').doc(String(newProd.id)).set(newProd);
-    } else {
-        const products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
-        products.unshift(newProd);
-        localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
-    }
+    const products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
+    products.unshift(newProd);
+    localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
 
     document.getElementById('add-product-form').reset();
     document.getElementById('p-img-preview-box').classList.add('hidden');
@@ -1399,7 +1757,7 @@ async function handleNewListing(e) {
 }
 
 function openEditModal(productId) {
-    const products = productsState.length > 0 ? productsState : (JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || []);
+    const products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
     const p = products.find(prod => prod.id === productId);
     if (!p) return;
 
@@ -1422,48 +1780,36 @@ function toggleEditModal() {
     document.getElementById('edit-product-modal').classList.toggle('hidden');
 }
 
-async function handleSaveEdit(e) {
+function handleSaveEdit(e) {
     e.preventDefault();
     const productId = Number(document.getElementById('edit-p-id').value);
+    let products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
 
-    const updateObj = {
-        title: document.getElementById('edit-p-title').value.trim(),
-        category: document.getElementById('edit-p-category').value,
-        grade: document.getElementById('edit-p-grade').value,
-        price: Number(document.getElementById('edit-p-price').value),
-        unit: document.getElementById('edit-p-unit').value.trim(),
-        stock: Number(document.getElementById('edit-p-stock').value),
-        desc: document.getElementById('edit-p-desc').value.trim(),
-        image: document.getElementById('edit-p-img').value.trim()
-    };
+    const idx = products.findIndex(prod => prod.id === productId);
+    if (idx !== -1) {
+        products[idx].title = document.getElementById('edit-p-title').value.trim();
+        products[idx].category = document.getElementById('edit-p-category').value;
+        products[idx].grade = document.getElementById('edit-p-grade').value;
+        products[idx].price = Number(document.getElementById('edit-p-price').value);
+        products[idx].unit = document.getElementById('edit-p-unit').value.trim();
+        products[idx].stock = Number(document.getElementById('edit-p-stock').value);
+        products[idx].desc = document.getElementById('edit-p-desc').value.trim();
+        products[idx].image = document.getElementById('edit-p-img').value.trim();
 
-    if (isFirebaseConfigured && db) {
-        await db.collection('products').doc(String(productId)).update(updateObj);
-    } else {
-        let products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
-        const idx = products.findIndex(prod => prod.id === productId);
-        if (idx !== -1) {
-            Object.assign(products[idx], updateObj);
-            localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
-        }
+        localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+        toggleEditModal();
+        renderFarmerDashboard();
+        renderMarketplace();
+        alert("Listing updated successfully!");
     }
-
-    toggleEditModal();
-    renderFarmerDashboard();
-    renderMarketplace();
-    alert("Listing updated successfully!");
 }
 
-async function deleteProduct(productId) {
+function deleteProduct(productId) {
     if (!confirm("Are you sure you want to delete this produce listing?")) return;
 
-    if (isFirebaseConfigured && db) {
-        await db.collection('products').doc(String(productId)).delete();
-    } else {
-        let products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
-        products = products.filter(p => p.id !== productId);
-        localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
-    }
+    let products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
+    products = products.filter(p => p.id !== productId);
+    localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
 
     renderFarmerDashboard();
     renderMarketplace();
@@ -1502,8 +1848,8 @@ function renderTranspoDashboard() {
 function renderTranspoOrders() {
     const container = document.getElementById('transpo-orders-container');
     container.innerHTML = '';
-    const orders = ordersState.length > 0 ? ordersState : (JSON.parse(localStorage.getItem(ORDERS_KEY)) || []);
-    const users = usersState.length > 0 ? usersState : (JSON.parse(localStorage.getItem(USERS_KEY)) || []);
+    const orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
+    const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
     const session = JSON.parse(localStorage.getItem(SESSION_KEY));
 
     if (orders.length === 0) {
@@ -1519,7 +1865,7 @@ function renderTranspoOrders() {
 
 function renderTranspoFleet() {
     const session = JSON.parse(localStorage.getItem(SESSION_KEY));
-    const users = usersState.length > 0 ? usersState : (JSON.parse(localStorage.getItem(USERS_KEY)) || []);
+    const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
 
     const pendingList = document.getElementById('pending-riders-list');
     const approvedList = document.getElementById('approved-riders-list');
@@ -1564,34 +1910,31 @@ function renderTranspoFleet() {
     }
 }
 
-async function approveRider(riderEmail) {
-    if (isFirebaseConfigured && db) {
-        await db.collection('users').doc(riderEmail).update({ status: 'verified' });
-    } else {
-        let users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
-        const idx = users.findIndex(u => u.email === riderEmail);
-        if (idx !== -1) {
-            users[idx].status = 'verified';
-            localStorage.setItem(USERS_KEY, JSON.stringify(users));
-        }
+function approveRider(riderEmail) {
+    let users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+    const idx = users.findIndex(u => u.email === riderEmail);
+
+    if (idx !== -1) {
+        users[idx].status = 'verified';
+        localStorage.setItem(USERS_KEY, JSON.stringify(users));
+        renderTranspoFleet();
+        alert(`Rider ${users[idx].name} verified and added to active fleet!`);
     }
-    renderTranspoFleet();
-    alert(`Rider verified and added to active fleet!`);
 }
 
-async function assignRiderToOrder(orderId, legType, riderEmail) {
-    const updateObj = legType === 'pickup' ? { pickupRiderEmail: riderEmail } : { deliveryRiderEmail: riderEmail };
+function assignRiderToOrder(orderId, legType, riderEmail) {
+    let orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
+    const order = orders.find(o => o.id === orderId);
 
-    if (isFirebaseConfigured && db) {
-        await db.collection('orders').doc(orderId).update(updateObj);
+    if (!order) return;
+
+    if (legType === 'pickup') {
+        order.pickupRiderEmail = riderEmail;
     } else {
-        let orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
-        const order = orders.find(o => o.id === orderId);
-        if (order) {
-            Object.assign(order, updateObj);
-            localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
-        }
+        order.deliveryRiderEmail = riderEmail;
     }
+
+    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
     renderTranspoOrders();
     alert(`Rider assigned to ${legType === 'pickup' ? 'First-Mile Pickup' : 'Last-Mile Delivery'} for order ${orderId}!`);
 }
@@ -1602,8 +1945,8 @@ function renderRiderDashboard() {
     const container = document.getElementById('rider-jobs-container');
     container.innerHTML = '';
 
-    const orders = ordersState.length > 0 ? ordersState : (JSON.parse(localStorage.getItem(ORDERS_KEY)) || []);
-    const users = usersState.length > 0 ? usersState : (JSON.parse(localStorage.getItem(USERS_KEY)) || []);
+    const orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
+    const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
 
     const assignedJobs = orders.filter(o => o.pickupRiderEmail === session.email || o.deliveryRiderEmail === session.email);
 
@@ -1618,47 +1961,45 @@ function renderRiderDashboard() {
     });
 }
 
-async function respondToJobAssignment(orderId, legType, decision) {
+function respondToJobAssignment(orderId, legType, decision) {
     const session = JSON.parse(localStorage.getItem(SESSION_KEY));
-    let orders = ordersState.length > 0 ? ordersState : (JSON.parse(localStorage.getItem(ORDERS_KEY)) || []);
+    let orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
     const order = orders.find(o => o.id === orderId);
+
     if (!order) return;
 
-    let updateObj = {};
     if (decision === 'accept') {
         if (legType === 'pickup') {
-            updateObj = { pickupAccepted: true };
+            order.pickupAccepted = true;
             updateRiderDutyStatus("In Transit - Picking Up Packages");
         } else {
-            updateObj = { deliveryAccepted: true };
+            order.deliveryAccepted = true;
             updateRiderDutyStatus("In Transit - Delivering Parcels");
         }
         alert(`You accepted the ${legType} assignment for order ${orderId}!`);
     } else {
         const reason = prompt("Optional reason for rejecting this job assignment:");
+        if (legType === 'pickup') {
+            order.pickupRiderEmail = null;
+            order.pickupAccepted = false;
+        } else {
+            order.deliveryRiderEmail = null;
+            order.deliveryAccepted = false;
+        }
+
         const now = new Date().toISOString().replace('T', ' ').substring(0, 16);
-        const newTimeline = [...(order.timeline || []), {
+        order.timeline.push({
             status: `Rider Rejected (${legType})`,
             time: now,
             updatedBy: session.name,
             role: "Rider",
             reason: reason || "Rider unavailable"
-        }];
+        });
 
-        if (legType === 'pickup') {
-            updateObj = { pickupRiderEmail: null, pickupAccepted: false, timeline: newTimeline };
-        } else {
-            updateObj = { deliveryRiderEmail: null, deliveryAccepted: false, timeline: newTimeline };
-        }
         alert(`Job assignment declined. Returned to company dispatch pool.`);
     }
 
-    if (isFirebaseConfigured && db) {
-        await db.collection('orders').doc(orderId).update(updateObj);
-    } else {
-        Object.assign(order, updateObj);
-        localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
-    }
+    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
     renderRiderDashboard();
 }
 
@@ -1676,8 +2017,8 @@ function renderOrdersList() {
     const container = document.getElementById('orders-list-container');
     container.innerHTML = '';
 
-    const orders = ordersState.length > 0 ? ordersState : (JSON.parse(localStorage.getItem(ORDERS_KEY)) || []);
-    const users = usersState.length > 0 ? usersState : (JSON.parse(localStorage.getItem(USERS_KEY)) || []);
+    const orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
+    const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
 
     let userOrders = [];
     if (session.role === 'consumer') {
@@ -1733,6 +2074,7 @@ function createOrderCardElement(order, session, users) {
 
     const currentIdx = pipelineStages.indexOf(order.status) !== -1 ? pipelineStages.indexOf(order.status) : 0;
 
+    // Cancellation Check: Buyer can cancel if early stages (< Ready for Courier Pick-up)
     const isBuyer = session.email === order.buyerEmail;
     const canCancel = isBuyer && (order.status === "Order Placed" || order.status === "Order Received" || order.status === "Packing Order");
 
@@ -1747,6 +2089,7 @@ function createOrderCardElement(order, session, users) {
         }
     }
 
+    // Role Specific Controls
     let controlsHtml = '';
 
     if (session.role === 'farmer' && session.email === order.farmerEmail) {
@@ -1764,6 +2107,7 @@ function createOrderCardElement(order, session, users) {
         const farmerProvince = farmerUser.province || "Batangas";
         const buyerProvince = buyerUser.province || "Batangas";
 
+        // Filter Pickup Riders: same company + matching farmer province + online/picking-up
         const pickupRiders = users.filter(u => 
             u.role === 'transpo_rider' && 
             u.companyEmail === session.email && 
@@ -1772,6 +2116,7 @@ function createOrderCardElement(order, session, users) {
             (u.dutyStatus === 'Online / Available' || u.dutyStatus === 'In Transit - Picking Up Packages')
         );
 
+        // Filter Delivery Riders: same company + matching buyer province + online/delivering
         const deliveryRiders = users.filter(u => 
             u.role === 'transpo_rider' && 
             u.companyEmail === session.email && 
@@ -1790,7 +2135,7 @@ function createOrderCardElement(order, session, users) {
         }
         pickupSelectHtml += `</select>`;
 
-        const isAtSortationCenter = currentIdx >= 9;
+        const isAtSortationCenter = currentIdx >= 9; // Delivered to Warehouse or later
         let deliverySelectHtml = '';
 
         if (!isAtSortationCenter) {
@@ -1867,6 +2212,7 @@ function createOrderCardElement(order, session, users) {
         }
     }
 
+    // Direct Messaging Shortcuts
     let msgShortcutsHtml = '';
     if (session.role === 'consumer') {
         msgShortcutsHtml = `<button class="btn-secondary btn-sm" onclick="openChatWith('${order.farmerEmail}', '${farmerUser.farmName || farmerUser.name}', 'farmer')">💬 Message Farmer</button>`;
@@ -1883,6 +2229,7 @@ function createOrderCardElement(order, session, users) {
         }
     }
 
+    // Chronological Timeline HTML
     let timelineHtml = '<div class="timeline-list"><strong>📜 Chronological Event Tracking Timeline:</strong>';
     if (order.timeline && order.timeline.length > 0) {
         order.timeline.forEach(t => {
@@ -1927,10 +2274,11 @@ function toggleOrderDetails(orderId) {
     if (pane) pane.classList.toggle('hidden');
 }
 
-async function submitStatusUpdate(orderId, newStatus) {
+function submitStatusUpdate(orderId, newStatus) {
     const session = JSON.parse(localStorage.getItem(SESSION_KEY));
-    let orders = ordersState.length > 0 ? ordersState : (JSON.parse(localStorage.getItem(ORDERS_KEY)) || []);
+    let orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
     const order = orders.find(o => o.id === orderId);
+
     if (!order) return;
 
     const pipelineStages = [
@@ -1957,6 +2305,7 @@ async function submitStatusUpdate(orderId, newStatus) {
 
     let reason = null;
 
+    // Strict Pipeline Check: Backtracking requires reason, skipping not allowed
     if (newIdx < currentIdx) {
         reason = prompt(`You are reverting order status backward from "${order.status}" to "${newStatus}".
 
@@ -1976,6 +2325,7 @@ Please enter the reason for backtracking (e.g. "Rider vehicle delay", "Address r
         return;
     }
 
+    order.status = newStatus;
     const now = new Date().toISOString().replace('T', ' ').substring(0, 16);
 
     let roleName = "User";
@@ -1983,24 +2333,15 @@ Please enter the reason for backtracking (e.g. "Rider vehicle delay", "Address r
     else if (session.role === 'transpo_company') roleName = "Sortation Hub";
     else if (session.role === 'transpo_rider') roleName = "Courier Rider";
 
-    const newTimeline = [...(order.timeline || []), {
+    order.timeline.push({
         status: newStatus,
         time: now,
         updatedBy: session.name,
         role: roleName,
         reason: reason ? reason.trim() : null
-    }];
+    });
 
-    if (isFirebaseConfigured && db) {
-        await db.collection('orders').doc(orderId).update({
-            status: newStatus,
-            timeline: newTimeline
-        });
-    } else {
-        order.status = newStatus;
-        order.timeline = newTimeline;
-        localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
-    }
+    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
 
     renderOrdersList();
     if (session.role === 'transpo_company') renderTranspoOrders();
@@ -2009,11 +2350,11 @@ Please enter the reason for backtracking (e.g. "Rider vehicle delay", "Address r
     alert(`Order ${orderId} updated to "${newStatus}"!`);
 }
 
-async function cancelOrder(orderId) {
+function cancelOrder(orderId) {
     if (!confirm("Are you sure you want to cancel this order?")) return;
 
-    let orders = ordersState.length > 0 ? ordersState : (JSON.parse(localStorage.getItem(ORDERS_KEY)) || []);
-    let products = productsState.length > 0 ? productsState : (JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || []);
+    let orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
+    let products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
     const session = JSON.parse(localStorage.getItem(SESSION_KEY));
 
     const order = orders.find(o => o.id === orderId);
@@ -2027,37 +2368,24 @@ async function cancelOrder(orderId) {
 
     // Restore Stock
     if (order.items) {
-        for (let item of order.items) {
+        order.items.forEach(item => {
             let p = products.find(prod => prod.id === item.id);
-            if (p) {
-                p.stock += item.qty;
-                if (isFirebaseConfigured && db) {
-                    await db.collection('products').doc(String(p.id)).update({ stock: p.stock });
-                }
-            }
-        }
+            if (p) p.stock += item.qty;
+        });
     }
 
+    order.status = "Cancelled";
     const now = new Date().toISOString().replace('T', ' ').substring(0, 16);
-    const newTimeline = [...(order.timeline || []), {
+    order.timeline.push({
         status: "Cancelled",
         time: now,
         updatedBy: session.name,
         role: "Buyer",
         reason: "Cancelled by buyer"
-    }];
+    });
 
-    if (isFirebaseConfigured && db) {
-        await db.collection('orders').doc(orderId).update({
-            status: "Cancelled",
-            timeline: newTimeline
-        });
-    } else {
-        order.status = "Cancelled";
-        order.timeline = newTimeline;
-        localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
-        localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
-    }
+    localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
 
     renderOrdersList();
     renderMarketplace();
@@ -2089,6 +2417,7 @@ function toggleAccountModal() {
             farmNameContainer.classList.add('hidden');
         }
 
+        // Set PSGC Address
         if (session.region) {
             document.getElementById('acc-region').value = session.region;
             onRegionChange('acc');
@@ -2105,7 +2434,7 @@ function toggleAccountModal() {
     document.getElementById('account-modal').classList.toggle('hidden');
 }
 
-async function handleSaveAccount(e) {
+function handleSaveAccount(e) {
     e.preventDefault();
     const session = JSON.parse(localStorage.getItem(SESSION_KEY));
     if (!session) return;
@@ -2127,40 +2456,43 @@ async function handleSaveAccount(e) {
 
     const fullAddress = `${street}, ${city}, ${province}, ${region}`;
 
-    const updateObj = {
-        name: newName,
-        phone: newPhone,
-        desc: newDesc,
-        password: newPass,
-        region,
-        province,
-        city,
-        street,
-        address: fullAddress
-    };
+    let users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+    const idx = users.findIndex(u => u.email === session.email);
 
-    if (session.role === 'farmer') {
-        const farmNameVal = document.getElementById('acc-farm-name').value.trim();
-        updateObj.farmName = farmNameVal || `${newName}'s Organic Farm`;
-    }
+    if (idx !== -1) {
+        users[idx].name = newName;
+        users[idx].phone = newPhone;
+        users[idx].desc = newDesc;
+        users[idx].password = newPass;
+        users[idx].region = region;
+        users[idx].province = province;
+        users[idx].city = city;
+        users[idx].street = street;
+        users[idx].address = fullAddress;
 
-    if (isFirebaseConfigured && db) {
-        await db.collection('users').doc(session.email).update(updateObj);
-    } else {
-        let users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
-        const idx = users.findIndex(u => u.email === session.email);
-        if (idx !== -1) {
-            Object.assign(users[idx], updateObj);
-            localStorage.setItem(USERS_KEY, JSON.stringify(users));
+        session.name = newName;
+        session.phone = newPhone;
+        session.desc = newDesc;
+        session.password = newPass;
+        session.region = region;
+        session.province = province;
+        session.city = city;
+        session.street = street;
+        session.address = fullAddress;
+
+        if (session.role === 'farmer') {
+            const farmNameVal = document.getElementById('acc-farm-name').value.trim();
+            users[idx].farmName = farmNameVal || `${newName}'s Organic Farm`;
+            session.farmName = users[idx].farmName;
         }
+
+        localStorage.setItem(USERS_KEY, JSON.stringify(users));
+        localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+
+        checkSession();
+        toggleAccountModal();
+        alert("Account profile settings updated successfully!");
     }
-
-    Object.assign(session, updateObj);
-    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-
-    checkSession();
-    toggleAccountModal();
-    alert("Account profile settings updated successfully!");
 }
 
 // DIRECT MESSAGING
@@ -2177,7 +2509,7 @@ function toggleMessagesModal() {
 
 function initiateChatFromModal() {
     if (!currentModalProductId) return;
-    const products = productsState.length > 0 ? productsState : (JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || []);
+    const products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
     const p = products.find(prod => prod.id === currentModalProductId);
     if (!p) return;
 
@@ -2210,7 +2542,8 @@ function openChatWith(email, name, role, initialMessage = null) {
     renderChatThread(email);
 }
 
-async function sendDirectMessage(senderEmail, senderName, senderRole, receiverEmail, receiverName, receiverRole, text) {
+function sendDirectMessage(senderEmail, senderName, senderRole, receiverEmail, receiverName, receiverRole, text) {
+    const messages = JSON.parse(localStorage.getItem(MESSAGES_KEY)) || [];
     const newMsg = {
         id: Date.now(),
         senderEmail,
@@ -2224,13 +2557,8 @@ async function sendDirectMessage(senderEmail, senderName, senderRole, receiverEm
         read: false
     };
 
-    if (isFirebaseConfigured && db) {
-        await db.collection('messages').doc(String(newMsg.id)).set(newMsg);
-    } else {
-        const messages = JSON.parse(localStorage.getItem(MESSAGES_KEY)) || [];
-        messages.push(newMsg);
-        localStorage.setItem(MESSAGES_KEY, JSON.stringify(messages));
-    }
+    messages.push(newMsg);
+    localStorage.setItem(MESSAGES_KEY, JSON.stringify(messages));
     updateUnreadMessagesCount();
 }
 
@@ -2241,7 +2569,7 @@ function renderConversationsList() {
 
     if (!session) return;
 
-    const messages = messagesState.length > 0 ? messagesState : (JSON.parse(localStorage.getItem(MESSAGES_KEY)) || []);
+    const messages = JSON.parse(localStorage.getItem(MESSAGES_KEY)) || [];
     const contactsMap = {};
 
     messages.forEach(m => {
@@ -2306,26 +2634,21 @@ function renderChatThread(targetEmail) {
     const session = JSON.parse(localStorage.getItem(SESSION_KEY));
     if (!session || !targetEmail) return;
 
-    let messages = messagesState.length > 0 ? messagesState : (JSON.parse(localStorage.getItem(MESSAGES_KEY)) || []);
-    const users = usersState.length > 0 ? usersState : (JSON.parse(localStorage.getItem(USERS_KEY)) || []);
+    let messages = JSON.parse(localStorage.getItem(MESSAGES_KEY)) || [];
+    const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
 
     const targetUser = users.find(u => u.email === targetEmail) || { name: targetEmail, role: 'User' };
 
     document.getElementById('chat-recipient-name').innerText = targetUser.name;
     document.getElementById('chat-recipient-role').innerText = `Role: ${targetUser.role} • ${targetUser.province || 'Philippines'}`;
 
+    // Mark as read
     messages.forEach(m => {
-        if (m.senderEmail === targetEmail && m.receiverEmail === session.email && !m.read) {
+        if (m.senderEmail === targetEmail && m.receiverEmail === session.email) {
             m.read = true;
-            if (isFirebaseConfigured && db) {
-                db.collection('messages').doc(String(m.id)).update({ read: true });
-            }
         }
     });
-
-    if (!isFirebaseConfigured) {
-        localStorage.setItem(MESSAGES_KEY, JSON.stringify(messages));
-    }
+    localStorage.setItem(MESSAGES_KEY, JSON.stringify(messages));
     updateUnreadMessagesCount();
 
     const body = document.getElementById('messages-body');
@@ -2367,7 +2690,7 @@ function sendChatMessage() {
 
     if (!session || !activeChatEmail || !text) return;
 
-    const users = usersState.length > 0 ? usersState : (JSON.parse(localStorage.getItem(USERS_KEY)) || []);
+    const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
     const targetUser = users.find(u => u.email === activeChatEmail) || { name: activeChatEmail, role: 'User' };
 
     sendDirectMessage(
@@ -2389,9 +2712,9 @@ function updateUnreadMessagesCount() {
     const session = JSON.parse(localStorage.getItem(SESSION_KEY));
     const badge = document.getElementById('messages-badge');
 
-    if (!session || badge) return;
+    if (!session || !badge) return;
 
-    const messages = messagesState.length > 0 ? messagesState : (JSON.parse(localStorage.getItem(MESSAGES_KEY)) || []);
+    const messages = JSON.parse(localStorage.getItem(MESSAGES_KEY)) || [];
     const unread = messages.filter(m => m.receiverEmail === session.email && !m.read).length;
 
     if (unread > 0) {
