@@ -5,12 +5,13 @@
 // (Firebase Console -> Project Settings -> General -> Your apps -> Web app)
 
 const firebaseConfig = {
-    apiKey: "YOUR_FIREBASE_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyD-NZGy7XLD98K5tvqxW2JWbPi0FzsDW-w",
+  authDomain: "agridirect-d189f.firebaseapp.com",
+  projectId: "agridirect-d189f",
+  storageBucket: "agridirect-d189f.firebasestorage.app",
+  messagingSenderId: "130901995399",
+  appId: "1:130901995399:web:215bee695781862750ad22",
+  measurementId: "G-LT333QP3QH"
 };
 
 // Initialize Firebase App & Firestore Database
