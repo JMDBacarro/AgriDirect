@@ -19,7 +19,7 @@ let db = null;
 let isFirebaseConfigured = false;
 
 try {
-    if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+    if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_FIREBASE_API_KEY") {
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
