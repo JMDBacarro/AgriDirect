@@ -398,9 +398,12 @@ Cart <span id="cart-badge" class="cart-badge">0</span>
 
 <!-- ADMIN PORTAL -->
 <div id="admin-portal" class="dashboard-container hidden">
-<div class="dashboard-header">
+<div class="dashboard-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+<div>
 <h2>🛡️ System Administration Portal</h2>
 <p class="subtext">Platform oversight, user directory, content moderation, and global dispatch monitoring</p>
+</div>
+<button type="button" class="btn-secondary btn-sm" style="border-color:#7c3aed; color:#7c3aed; background:#f5f3ff; font-weight:600;" onclick="reseedCloudDatabase()">🔄 Reset & Re-seed Cloud Data</button>
 </div>
 
 <!-- ADMIN STATS GRID -->

@@ -5,13 +5,12 @@
 // (Firebase Console -> Project Settings -> General -> Your apps -> Web app)
 
 const firebaseConfig = {
-   apiKey: "AIzaSyD-NZGy7XLD98K5tvqxW2JWbPi0FzsDW-w",
-  authDomain: "agridirect-d189f.firebaseapp.com",
-  projectId: "agridirect-d189f",
-  storageBucket: "agridirect-d189f.firebasestorage.app",
-  messagingSenderId: "130901995399",
-  appId: "1:130901995399:web:215bee695781862750ad22",
-  measurementId: "G-LT333QP3QH"
+    apiKey: "YOUR_FIREBASE_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
 };
 
 // Initialize Firebase App & Firestore Database
@@ -178,6 +177,26 @@ async function seedFirebaseDefaultData() {
             batch.set(docRef, u);
         });
         await batch.commit();
+    } else {
+        // Ensure admin@test.com exists in existing Firestore collection
+        const adminDoc = await db.collection('users').doc('admin@test.com').get();
+        if (!adminDoc.exists) {
+            console.log("🛡️ Injecting missing Admin account into existing Firestore database...");
+            const adminObj = {
+                name: "System Administrator",
+                email: "admin@test.com",
+                password: "123",
+                role: "admin",
+                phone: "09170009999",
+                region: "National Capital Region (NCR)",
+                province: "NCR",
+                city: "Quezon City",
+                street: "AgriDirect HQ, Central Office",
+                address: "AgriDirect HQ, Quezon City, NCR, National Capital Region (NCR)",
+                desc: "Global System Administrator with full platform oversight and moderation privileges."
+            };
+            await db.collection('users').doc('admin@test.com').set(adminObj);
+        }
     }
 
     const prodSnap = await db.collection('products').get();
@@ -195,6 +214,19 @@ async function seedFirebaseDefaultData() {
 
 function getInitialUsersData() {
     return [
+        {
+            name: "System Administrator",
+            email: "admin@test.com",
+            password: "123",
+            role: "admin",
+            phone: "09170009999",
+            region: "National Capital Region (NCR)",
+            province: "NCR",
+            city: "Quezon City",
+            street: "AgriDirect HQ, Central Office",
+            address: "AgriDirect HQ, Quezon City, NCR, National Capital Region (NCR)",
+            desc: "Global System Administrator with full platform oversight and moderation privileges."
+        },
         { name: "Express Crop Transport", email: "transpo@test.com", password: "123", role: "transpo_company", phone: "09171112222", region: "CALABARZON (Region IV-A)", province: "Batangas", city: "Lipa City", street: "Logistics Hub 1", address: "Lipa City, Batangas, CALABARZON (Region IV-A)", desc: "Regional agricultural cold-chain and courier logistics provider." },
         { name: "Maria Farmer", email: "farmer1@test.com", password: "123", role: "farmer", phone: "09171234561", farmName: "Batangas Organic Farms", region: "CALABARZON (Region IV-A)", province: "Batangas", city: "Lipa City", street: "Barangay Marawoy", address: "Barangay Marawoy, Lipa City, Batangas, CALABARZON (Region IV-A)", desc: "Organic vegetable farm in volcanic Batangas soil specializing in root crops." },
         { name: "Juan Farmer", email: "farmer2@test.com", password: "123", role: "farmer", phone: "09171234562", farmName: "Highland Greens Cavite", region: "CALABARZON (Region IV-A)", province: "Cavite", city: "Dasmariñas City", street: "Pala-Pala Road", address: "Pala-Pala Road, Dasmariñas City, Cavite, CALABARZON (Region IV-A)", desc: "Highland leafy greens, lettuce, and cool-climate vegetables." },
@@ -324,14 +356,46 @@ function updateGradeDescriptionHint(prefix) {
 }
 
 // SESSION CONTROL & ROLE MANAGEMENT
-function quickLogin(email, password) {
+async function quickLogin(email, password) {
     document.getElementById('login-email').value = email;
     document.getElementById('login-password').value = password;
-    const form = document.getElementById('login-form');
-    if (form) {
-        const event = new Event('submit', { cancelable: true });
-        form.dispatchEvent(event);
+
+    const users = usersState.length > 0 ? usersState : (JSON.parse(localStorage.getItem(USERS_KEY)) || []);
+    let user = users.find(u => u.email === email && u.password === password);
+
+    // Self-healing fallback for admin
+    if (!user && email === 'admin@test.com') {
+        const adminObj = {
+            name: "System Administrator",
+            email: "admin@test.com",
+            password: "123",
+            role: "admin",
+            phone: "09170009999",
+            region: "National Capital Region (NCR)",
+            province: "NCR",
+            city: "Quezon City",
+            street: "AgriDirect HQ, Central Office",
+            address: "AgriDirect HQ, Quezon City, NCR, National Capital Region (NCR)",
+            desc: "Global System Administrator with full platform oversight and moderation privileges."
+        };
+        user = adminObj;
+        if (db) {
+            try { await db.collection('users').doc('admin@test.com').set(adminObj); } catch(e) {}
+        }
     }
+
+    if (!user) {
+        alert("Account " + email + " not found. Please try again in a moment.");
+        return;
+    }
+
+    if (user.role === 'transpo_rider' && user.status === 'pending') {
+        alert("Your registration request with " + user.companyName + " is currently pending verification.");
+        return;
+    }
+
+    localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+    checkSession();
 }
 
 function checkSession() {
@@ -2616,4 +2680,31 @@ function renderAdminOrders() {
         const card = createOrderCardElement(order, session, users);
         container.appendChild(card);
     });
+}
+
+
+async function reseedCloudDatabase() {
+    if (!confirm("Are you sure you want to reset and re-seed all initial demo accounts and produce listings in Firestore?")) return;
+    
+    if (db) {
+        try {
+            const initialUsers = getInitialUsersData();
+            for (let u of initialUsers) {
+                await db.collection('users').doc(u.email).set(u);
+            }
+            const initialProducts = getInitialProductsData();
+            for (let p of initialProducts) {
+                await db.collection('products').doc(String(p.id)).set(p);
+            }
+            alert("✅ Cloud Database successfully re-seeded with all initial accounts (including Admin) and produce listings!");
+            renderAdminDashboard();
+        } catch(err) {
+            alert("Error re-seeding cloud database: " + err.message);
+        }
+    } else {
+        localStorage.setItem(USERS_KEY, JSON.stringify(getInitialUsersData()));
+        localStorage.setItem(PRODUCTS_KEY, JSON.stringify(getInitialProductsData()));
+        alert("✅ Local storage re-seeded!");
+        renderAdminDashboard();
+    }
 }
