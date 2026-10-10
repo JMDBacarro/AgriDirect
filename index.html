@@ -8,6 +8,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FIREBASE COMPAT SDKs (v10) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 </head>
 <body>
 <!-- AUTHENTICATION SCREEN -->
@@ -33,14 +37,16 @@
 <input type="password" id="login-password" required placeholder="••••••••">
 </div>
 <button type="submit" class="btn-primary">Log In</button>
-<div class="demo-hints">
-<small><strong>Demo Accounts (Pass: 123)</strong><br>
-• Farmers: <code>farmer1@test.com</code> to <code>farmer5@test.com</code><br>
-• Buyers: <code>buyer1@test.com</code> to <code>buyer5@test.com</code><br>
-• Transpo Co: <code>transpo@test.com</code><br>
-• Riders: <code>rider1@test.com</code> to <code>rider10@test.com</code>
-</small>
-</div>
+                <div class="demo-hints">
+                    <small><strong>⚡ Quick Demo Login (Click to test):</strong></small>
+                    <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;">
+                        <button type="button" class="btn-secondary btn-sm" style="background:#7c3aed; color:#fff;" onclick="quickLogin('admin@test.com', '123')">🛡️ Admin</button>
+                        <button type="button" class="btn-secondary btn-sm" style="background:#2e7d32; color:#fff;" onclick="quickLogin('farmer1@test.com', '123')">👨‍🌾 Farmer</button>
+                        <button type="button" class="btn-secondary btn-sm" style="background:#0284c7; color:#fff;" onclick="quickLogin('buyer1@test.com', '123')">🛒 Buyer</button>
+                        <button type="button" class="btn-secondary btn-sm" style="background:#b45309; color:#fff;" onclick="quickLogin('transpo@test.com', '123')">🚚 Transpo Hub</button>
+                        <button type="button" class="btn-secondary btn-sm" style="background:#059669; color:#fff;" onclick="quickLogin('rider1@test.com', '123')">🛵 Courier Rider</button>
+                    </div>
+                </div>
 </form>
 <!-- REGISTER FORM -->
 <form id="register-form" class="hidden" onsubmit="handleRegister(event)">
@@ -116,7 +122,7 @@
 <!-- FARMER DUAL-MODE TOGGLE SWITCHER BAR -->
 <div id="farmer-mode-switcher" class="mode-switcher-bar hidden">
 <button id="mode-buy-btn" class="mode-btn active" onclick="switchFarmerMode('buy')">Browse Marketplace (Buy)</button>
-<button id="mode-sell-btn" class="mode-btn" onclick="switchFarmerMode('sell')">👨‍🌾 Farmer Command Center (Sell)</button>
+<button id="mode-sell-btn" class="mode-btn" onclick="switchFarmerMode('sell')">Farmer Command Center (Sell)</button>
 </div>
 <div id="search-container" class="search-bar-container">
 <input type="text" id="global-search" placeholder="Search crops, farms, cities, or categories..." oninput="applyFilters()">
@@ -143,7 +149,7 @@
 <span id="orders-btn-label">My Orders</span>
 </button>
 <button id="nav-cart-btn" class="cart-trigger" onclick="toggleCartModal()">
-🛒 Cart <span id="cart-badge" class="cart-badge">0</span>
+Cart <span id="cart-badge" class="cart-badge">0</span>
 </button>
 <button class="btn-logout" onclick="handleLogout()">Logout</button>
 </div>
@@ -171,7 +177,7 @@
 </select>
 </div>
 <div class="filter-group">
-<span class="filter-label">🏡 Farm Province</span>
+<span class="filter-label">🏘️ Farm Province</span>
 <select id="province-filter" onchange="applyFilters()">
 <option value="all">All Provinces</option>
 </select>
@@ -216,6 +222,7 @@
 </div>
 </section>
 </div>
+
 <!-- FARMER PORTAL -->
 <div id="farmer-portal" class="dashboard-container hidden">
 <div class="dashboard-header">
@@ -244,7 +251,7 @@
 <div class="chart-section-card">
 <div class="chart-header">
 <div>
-<h3>📊 Sales Revenue Analytics</h3>
+<h3>📈 Sales Revenue Analytics</h3>
 <p class="subtext">Revenue breakdown by product listing</p>
 </div>
 <button class="btn-secondary btn-sm" onclick="renderRevenueChart()">Refresh Analytics</button>
@@ -337,6 +344,7 @@
 </div>
 </div>
 </div>
+
 <!-- TRANSPORTATION LOGISTICS PORTAL -->
 <div id="transpo-portal" class="dashboard-container hidden">
 <div class="dashboard-header">
@@ -346,7 +354,7 @@
 <!-- TRANSPORTATION TABS -->
 <div class="auth-tabs transpo-nav-tabs">
 <button id="tab-transpo-orders-btn" class="auth-tab-btn active" onclick="switchTranspoTab('orders')">📦 Active Dispatches & Hub Orders</button>
-<button id="tab-transpo-fleet-btn" class="auth-tab-btn" onclick="switchTranspoTab('fleet')">👥 Rider Fleet & Affiliations</button>
+<button id="tab-transpo-fleet-btn" class="auth-tab-btn" onclick="switchTranspoTab('fleet')">🛵 Rider Fleet & Affiliations</button>
 </div>
 <!-- TAB 1: ACTIVE DISPATCHES -->
 <div id="transpo-tab-orders" class="transpo-tab-pane">
@@ -376,6 +384,7 @@
 </div>
 </div>
 </div>
+
 <!-- RIDER PORTAL -->
 <div id="rider-portal" class="dashboard-container hidden">
 <div class="dashboard-header">
@@ -386,18 +395,89 @@
 <!-- Assigned jobs rendered dynamically -->
 </div>
 </div>
+
+<!-- ADMIN PORTAL -->
+<div id="admin-portal" class="dashboard-container hidden">
+<div class="dashboard-header">
+<h2>🛡️ System Administration Portal</h2>
+<p class="subtext">Platform oversight, user directory, content moderation, and global dispatch monitoring</p>
+</div>
+
+<!-- ADMIN STATS GRID -->
+<div class="stats-grid">
+<div class="stat-card highlight" style="background: linear-gradient(135deg, #6d28d9, #4c1d95);">
+<span class="stat-title" style="color:#e9d5ff;">Registered Accounts</span>
+<span id="admin-stat-users" class="stat-value" style="color:#ffffff;">0</span>
+</div>
+<div class="stat-card">
+<span class="stat-title">Active Crop Listings</span>
+<span id="admin-stat-products" class="stat-value">0</span>
+</div>
+<div class="stat-card">
+<span class="stat-title">Platform Orders</span>
+<span id="admin-stat-orders" class="stat-value">0</span>
+</div>
+<div class="stat-card">
+<span class="stat-title">Gross Platform Revenue</span>
+<span id="admin-stat-revenue" class="stat-value">₱0</span>
+</div>
+</div>
+
+<!-- ADMIN NAVIGATION TABS -->
+<div class="auth-tabs transpo-nav-tabs">
+<button id="tab-admin-users-btn" class="auth-tab-btn active" onclick="switchAdminTab('users')">👥 User Directory & Accounts</button>
+<button id="tab-admin-listings-btn" class="auth-tab-btn" onclick="switchAdminTab('listings')">🌾 Produce Listings & Moderation</button>
+<button id="tab-admin-orders-btn" class="auth-tab-btn" onclick="switchAdminTab('orders')">📦 Global Platform Orders</button>
+</div>
+
+<!-- TAB 1: USER DIRECTORY -->
+<div id="admin-tab-users" class="admin-tab-pane">
+<div class="pane-header" style="background:var(--card-bg); padding:1rem; border-radius:var(--radius); border:1px solid var(--border-color); margin-bottom:1rem;">
+<div style="flex:1; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+<input type="text" id="admin-user-search" placeholder="Search user name, email, or location..." oninput="renderAdminUsers()" style="flex:1; min-width:200px; padding:8px 12px; border-radius:8px; border:1px solid var(--border-color);">
+<select id="admin-role-filter" onchange="renderAdminUsers()" style="padding:8px 12px; border-radius:8px; border:1px solid var(--border-color);">
+<option value="all">All Account Roles</option>
+<option value="consumer">Buyers / Consumers</option>
+<option value="farmer">Farmers / Producers</option>
+<option value="transpo_company">Transport Companies</option>
+<option value="transpo_rider">Courier Riders</option>
+<option value="admin">Administrators</option>
+</select>
+</div>
+</div>
+<div id="admin-users-list" class="inventory-list">
+<!-- Users rendered dynamically -->
+</div>
+</div>
+
+<!-- TAB 2: PRODUCE MODERATION -->
+<div id="admin-tab-listings" class="admin-tab-pane hidden">
+<div id="admin-products-list" class="product-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
+<!-- Product listings rendered dynamically -->
+</div>
+</div>
+
+<!-- TAB 3: GLOBAL ORDERS -->
+<div id="admin-tab-orders" class="admin-tab-pane hidden">
+<div id="admin-orders-list" class="orders-list">
+<!-- Global orders rendered dynamically -->
+</div>
+</div>
+</div>
+
 </main>
 </div>
+
 <!-- FARMER STOREFRONT / PROFILE MODAL -->
 <div id="farmer-profile-modal" class="modal-overlay hidden">
 <div class="modal-card modal-lg">
 <div class="modal-header">
-<h3>👨‍🌾 Farmer Storefront & Profile</h3>
+<h3>🌾 Farmer Storefront & Profile</h3>
 <button class="close-btn" onclick="toggleFarmerProfileModal()">&times;</button>
 </div>
 <div class="modal-body">
 <div class="farmer-storefront-header">
-<div class="farmer-avatar">🌾</div>
+<div class="farmer-avatar">👨‍🌾</div>
 <div class="farmer-meta">
 <h3 id="storefront-farm-name">Batangas Organic Farms</h3>
 <p id="storefront-owner-name" class="subtext">Owner: Maria Farmer</p>
@@ -415,6 +495,7 @@
 </div>
 </div>
 </div>
+
 <!-- PRODUCT DETAILS, REVIEWS & PUBLIC Q&A MODAL -->
 <div id="product-modal" class="modal-overlay hidden">
 <div class="modal-card modal-lg">
@@ -455,7 +536,7 @@
 <button id="modal-direct-msg-btn" class="btn-secondary" onclick="initiateChatFromModal()">💬 Message Farmer</button>
 </div>
 <div id="modal-self-listing-notice" class="notice-card hidden">
-<small>🔒 You are the owner of this crop listing.</small>
+<small>👨‍🌾 You are the owner of this crop listing.</small>
 </div>
 </div>
 </div>
@@ -496,7 +577,7 @@
 </div>
 <!-- REVIEW ELIGIBILITY NOTICE -->
 <div id="review-notice-card" class="notice-card hidden">
-<div class="notice-icon">🛡️</div>
+<div class="notice-icon">🔒</div>
 <h5>Verified Purchase Required</h5>
 <p id="review-notice-text">Reviews can only be submitted after purchasing and receiving this item (Order status: Delivered).</p>
 </div>
@@ -523,6 +604,7 @@
 </div>
 </div>
 </div>
+
 <!-- EDIT LISTING MODAL -->
 <div id="edit-product-modal" class="modal-overlay hidden">
 <div class="modal-card">
@@ -592,6 +674,7 @@
 </div>
 </div>
 </div>
+
 <!-- ORDER HISTORY & TRACKING MODAL -->
 <div id="orders-modal" class="modal-overlay hidden">
 <div class="modal-card modal-lg">
@@ -606,6 +689,7 @@
 </div>
 </div>
 </div>
+
 <!-- ACCOUNT PROFILE MODAL -->
 <div id="account-modal" class="modal-overlay hidden">
 <div class="modal-card">
@@ -674,6 +758,7 @@
 </div>
 </div>
 </div>
+
 <!-- CART & CHECKOUT MODAL (CASH ON DELIVERY) -->
 <div id="cart-modal" class="modal-overlay hidden">
 <div class="modal-card">
@@ -712,6 +797,7 @@
 </div>
 </div>
 </div>
+
 <!-- DIRECT MESSAGING MODAL (CONSUMER <-> FARMER) -->
 <div id="messages-modal" class="modal-overlay hidden">
 <div class="modal-card modal-lg chat-modal-card">
@@ -753,12 +839,6 @@ Select an active chat on the left or click "Message Farmer" on any product card 
 </div>
 </div>
 
-<!-- FIREBASE SDK v10 (Compat Version for seamless vanilla JS integration) -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
-<!-- APPLICATION SCRIPT -->
 <script src="script.js"></script>
 </body>
 </html>

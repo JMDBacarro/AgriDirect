@@ -244,3 +244,7 @@ body { background-color: var(--bg-light); color: var(--text-main); min-height: 1
     .top-nav { flex-wrap: wrap; padding: 1rem; }
     .search-bar-container { order: 3; max-width: 100%; width: 100%; }
 }
+
+/* ADMIN PORTAL STYLES */
+.role-badge.admin { background: #7c3aed !important; color: #ffffff; }
+.admin-tab-pane { margin-top: 1rem; }

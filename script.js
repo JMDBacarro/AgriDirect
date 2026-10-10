@@ -5,7 +5,7 @@
 // (Firebase Console -> Project Settings -> General -> Your apps -> Web app)
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD-NZGy7XLD98K5tvqxW2JWbPi0FzsDW-w",
+   apiKey: "AIzaSyD-NZGy7XLD98K5tvqxW2JWbPi0FzsDW-w",
   authDomain: "agridirect-d189f.firebaseapp.com",
   projectId: "agridirect-d189f",
   storageBucket: "agridirect-d189f.firebasestorage.app",
@@ -83,22 +83,6 @@ const PH_LOCATIONS = {
         "La Union": ["Agoo", "Aringay", "Bacnotan", "Bagulin", "Balaoan", "Bangar", "Bauang", "Burgos", "Caba", "San Fernando City", "Luna", "Naguilian", "Pugo", "Rosario", "San Gabriel", "San Juan", "Santo Tomas", "Santol", "Sudipen", "Tubao"],
         "Pangasinan": ["Agno", "Aguilar", "Alcala", "Anda", "Asingan", "Balungao", "Bani", "Basista", "Bautista", "Bayambang", "Binalonan", "Binmaley", "Bolinao", "Bugallon", "Burgos", "Calasiao", "Alaminos City", "Dagupan City", "San Carlos City", "Urdaneta City", "Dasol", "Infanta", "Labrador", "Laoac", "Lingayen", "Mabini", "Malasiqui", "Manaoag", "Mangaldan", "Mangatarem", "Mapandan", "Natividad", "Pozorrubio", "Rosales", "San Fabian", "San Jacinto", "San Manuel", "San Nicolas", "San Quintin", "Santa Barbara", "Santa Maria", "Santo Tomas", "Sison", "Sual", "Tayug", "Umingan", "Urbiztondo", "Villasis"]
     },
-    "Cagayan Valley (Region II)": {
-        "Batanes": ["Basco", "Itbayat", "Ivana", "Mahatao", "Sabtang", "Uyugan"],
-        "Cagayan": ["Abulug", "Alcala", "Allacapan", "Amulung", "Aparri", "Baggao", "Ballesteros", "Buguey", "Calayan", "Camalaniugan", "Claveria", "Enrile", "Gattaran", "Gonzaga", "Iguig", "Lal-lo", "Lasam", "Pamplona", "Peñablanca", "Piat", "Rizal", "Sanchez-Mira", "Santa Ana", "Santa Praxedes", "Santa Teresita", "Santo Niño (Faire)", "Solana", "Tuao", "Tuguegarao City"],
-        "Isabela": ["Alicia", "Angadanan", "Aurora", "Benito Soliven", "Burgos", "Cabagan", "Cabatuan", "Cauayan City", "Ilagan City", "Santiago City", "Cordon", "Delfin Albano", "Dinapigue", "Divilacan", "Echague", "Gamu", "Jones", "Luna", "Maconacon", "Mallig", "Naguilian", "Palanan", "Quezon", "Quirino", "Ramon", "Reina Mercedes", "Roxas", "San Agustin", "San Guillermo", "San Isidro", "San Manuel", "San Mariano", "San Mateo", "San Pablo", "Santa Maria", "Santo Tomas", "Tumauini"],
-        "Nueva Vizcaya": ["Alfonso Castañeda", "Ambaguio", "Aritao", "Bagabag", "Bambang", "Bayombong", "Diadi", "Dupax Norte", "Dupax Sur", "Kasibu", "Kayapa", "Quezon", "Santa Fe", "Solano", "Villaverde"],
-        "Quirino": ["Aglipay", "Cabarroguis", "Diffun", "Maddela", "Nagtipunan", "Saguday"]
-    },
-    "Central Luzon (Region III)": {
-        "Aurora": ["Baler", "Casiguran", "Dilasag", "Dinalungan", "Dingalan", "Dipaculao", "Maria Aurora", "San Luis"],
-        "Bataan": ["Abucay", "Bagac", "Balanga City", "Dinalupihan", "Hermosa", "Limay", "Mariveles", "Morong", "Orani", "Orion", "Pilar", "Samal"],
-        "Bulacan": ["Angat", "Balagtas", "Baliuag", "Bocaue", "Bulacan", "Bustos", "Calumpit", "Malolos City", "Meycauayan City", "San Jose del Monte City", "Doña Remedios Trinidad", "Guiguinto", "Hagonoy", "Marilao", "Norzagaray", "Obando", "Pandi", "Paombong", "Plaridel", "Pulilan", "San Ildefonso", "San Miguel", "San Rafael", "Santa Maria"],
-        "Nueva Ecija": ["Aliaga", "Bongabon", "Cabiao", "Carranglan", "Cabanatuan City", "Gapan City", "Palayan City", "Cuyapo", "Gabaldon", "General Mamerto Natividad", "General Tinio", "Guimba", "Jaen", "Laur", "Licab", "Llanera", "Lupao", "Nampicuan", "Pantabangan", "Peñaranda", "Quezon", "Rizal", "San Antonio", "San Isidro", "San Jose City", "San Leonardo", "Santa Rosa", "Santo Domingo", "Science City of Muñoz", "Talavera", "Talugtug", "Zaragoza"],
-        "Pampanga": ["Apalit", "Arayat", "Bacolor", "Candaba", "Angeles City", "San Fernando City", "Floridablanca", "Guagua", "Lubao", "Mabalacat City", "Macabebe", "Magalang", "Masantol", "Mexico", "Minalin", "Porac", "San Luis", "San Simon", "Santa Ana", "Santa Rita", "Santo Tomas", "Sasmuan"],
-        "Tarlac": ["Anao", "Bamban", "Camiling", "Capas", "Tarlac City", "Concepcion", "Gerona", "La Paz", "Mayantoc", "Moncada", "Paniqui", "Pura", "Ramos", "San Clemente", "San Jose", "San Manuel", "Santa Ignacia", "Victoria"],
-        "Zambales": ["Botolan", "Cabangan", "Candelaria", "Castillejos", "Olongapo City", "Iba", "Masinloc", "Palauig", "San Antonio", "San Felipe", "San Marcelino", "San Narciso", "Santa Cruz", "Subic"]
-    },
     "CALABARZON (Region IV-A)": {
         "Batangas": ["Agoncillo", "Alitagtag", "Balayan", "Balete", "Batangas City", "Bauan", "Calaca", "Calatagan", "Lipa City", "Tanauan City", "Cuenca", "Ibaan", "Laurel", "Lemery", "Lian", "Lobo", "Mabini", "Malvar", "Mataasnakahoy", "Nasugbu", "Padre Garcia", "Rosario", "San Jose", "San Juan", "San Luis", "San Nicolas", "San Pascual", "Santa Teresita", "Santo Tomas", "Taal", "Talisay", "Taysan", "Tingloy", "Tuy"],
         "Cavite": ["Alfonso", "Amadeo", "Carmona", "Bacoor City", "Cavite City", "Dasmariñas City", "General Trias City", "Imus City", "Tagaytay City", "Trece Martires City", "General Mariano Alvarez", "General Emilio Aguinaldo", "Indang", "Kawit", "Magallanes", "Maragondon", "Mendez", "Naic", "Noveleta", "Rosario", "Silang", "Tanza", "Ternate"],
@@ -106,85 +90,8 @@ const PH_LOCATIONS = {
         "Quezon": ["Agdangan", "Alabat", "Atimonan", "Buenavista", "Burdeos", "Calauag", "Candelaria", "Catanauan", "Lucena City", "Tayabas City", "Dolores", "General Luna", "General Nakar", "Guinayangan", "Gumaca", "Infanta", "Jomalig", "Lopez", "Lucban", "Macalelon", "Mauban", "Mulanay", "Padre Burgos", "Pagbilao", "Panukulan", "Patnanungan", "Perez", "Pitogo", "Plaridel", "Polillo", "Quezon", "Real", "Sampaloc", "San Andres", "San Antonio", "San Francisco (Aurora)", "San Narciso", "Sariaya", "Tagkawayan", "Tiaong", "Unisan"],
         "Rizal": ["Angono", "Baras", "Binangonan", "Cainta", "Cardona", "Antipolo City", "Jala-Jala", "Morong", "Pililla", "Rodriguez", "San Mateo", "Tanay", "Taytay", "Teresa"]
     },
-    "MIMAROPA Region (Region IV-B)": {
-        "Marinduque": ["Boac", "Buenavista", "Gasan", "Mogpog", "Santa Cruz", "Torrijos"],
-        "Occidental Mindoro": ["Abra de Ilog", "Calintaan", "Looc", "Lubang", "Magsaysay", "Mamburao", "Paluan", "Rizal", "Sablayan", "San Jose", "Santa Cruz"],
-        "Oriental Mindoro": ["Baco", "Bansud", "Bongabong", "Bulalacao", "Calapan City", "Gloria", "Mansalay", "Naujan", "Pinamalayan", "Pola", "Puerto Galera", "Roxas", "San Teodoro", "Socorro", "Victoria"],
-        "Palawan": ["Aborlan", "Agutaya", "Araceli", "Balabac", "Bataraza", "Brooke's Point", "Busuanga", "Cagayancillo", "Puerto Princesa City", "Coron", "Culion", "Cuyo", "Dumaran", "El Nido", "Kalayaan", "Linapacan", "Magsaysay", "Narra", "Quezon", "Rizal", "Roxas", "San Vicente", "Sofronio Española", "Taytay"],
-        "Romblon": ["Alcantara", "Banton", "Cajidiocan", "Calatrava", "Concepcion", "Corcuera", "Ferrol", "Looc", "Magdiwang", "Odiongan", "Romblon", "San Agustin", "San Andres", "San Fernando", "San Jose", "Santa Fe", "Santa Maria"]
-    },
-    "Bicol Region (Region V)": {
-        "Albay": ["Bacacay", "Camalig", "Legazpi City", "Ligao City", "Tabaco City", "Daraga", "Guinobatan", "Jovellar", "Libon", "Malilipot", "Malinao", "Manito", "Oas", "Pio Duran", "Polangui", "Rapu-Rapu", "Santo Domingo", "Tiwi"],
-        "Camarines Norte": ["Basud", "Capalonga", "Daet", "Jose Panganiban", "Labo", "Mercedes", "Paracale", "San Lorenzo Ruiz", "San Vicente", "Santa Elena", "Talisay", "Vinzons"],
-        "Camarines Sur": ["Baao", "Balatan", "Bato", "Bombon", "Buhi", "Bula", "Cabusao", "Calabanga", "Camaligan", "Canaman", "Caramoan", "Iriga City", "Naga City", "Del Gallego", "Gainza", "Garchitorena", "Goa", "Lagonoy", "Libmanan", "Lupi", "Magarao", "Milaor", "Minalabac", "Nabua", "Ocampo", "Pamplona", "Pasacao", "Pili", "Presentacion", "Ragay", "Sagñay", "San Fernando", "San Jose", "Sipocot", "Siruma", "Tigaon", "Tinambac"],
-        "Catanduanes": ["Bagamanoc", "Baras", "Bato", "Caramoran", "Gigmoto", "Pandan", "Panganiban", "San Andres", "San Miguel", "Viga", "Virac"],
-        "Masbate": ["Aroroy", "Baleno", "Balud", "Batuan", "Cataingan", "Cawayan", "Masbate City", "Claveria", "Dimasalang", "Esperanza", "Mandaon", "Milagros", "Mobo", "Monreal", "Palanas", "Pio V. Corpuz", "Placer", "San Fernando", "San Jacinto", "San Pascual", "Uson"],
-        "Sorsogon": ["Barcelona", "Bulan", "Bulusan", "Casiguran", "Castilla", "Sorsogon City", "Donsol", "Gubat", "Irosin", "Juban", "Magallanes", "Matnog", "Pilar", "Prieto Diaz", "Santa Magdalena"]
-    },
-    "Western Visayas (Region VI)": {
-        "Aklan": ["Altavas", "Balete", "Banga", "Batan", "Buruanga", "Ibajay", "Kalibo", "Lezo", "Libacao", "Madalag", "Makato", "Malay", "Malinao", "Nabas", "New Washington", "Numancia", "Tangalan"],
-        "Antique": ["Anini-y", "Barbaza", "Belison", "Bugasong", "Caluya", "Culasi", "Hamtic", "Laua-an", "Libertad", "Pandan", "Patnongon", "San Jose", "San Remigio", "Sebaste", "Sibalom", "Tibiao", "Tobias Fornier", "Valderrama Capiz"],
-        "Capiz": ["Roxas City", "Cuartero", "Dao", "Dumalag", "Dumarao", "Ivisan", "Jamindan", "Ma-Ayon", "Mambusao", "Panay", "Panitan", "Pilar", "Pontevedra", "President Roxas", "Sapi-An", "Sigma", "Tapaz"],
-        "Iloilo": ["Ajuy", "Alimodian", "Anilao", "Badiangan", "Balasan", "Banate", "Barotac Nuevo", "Barotac Viejo", "Batad", "Bingawan", "Cabatuan", "Calinog", "Carles", "Iloilo City", "Passi City", "Concepcion", "Dingle", "Dueñas", "Dumangas", "Estancia", "Guimbal", "Igbaras", "Janiuay", "Lambunao", "Leganes", "Lemery", "Leon", "Maasin", "Miagao", "Mina", "New Lucena", "Oton", "Pavia", "Pototan", "San Dionisio", "San Enrique", "San Joaquin", "San Miguel", "San Rafael", "Santa Barbara", "Sara", "Tigbauan", "Tubungan", "Zarraga"],
-        "Guimaras": ["Buenavista", "Jordan", "Nueva Valencia", "San Lorenzo", "Sibunag"]
-    },
-    "Negros Island Region (NIR)": {
-        "Negros Occidental": ["Binalbagan", "Calatrava", "Candoni", "Cauayan", "Bacolod City", "Bago City", "Cadiz City", "Escalante City", "Himamaylan City", "Kabankalan City", "La Carlota City", "Sagay City", "San Carlos City", "Silay City", "Sipalay City", "Talisay City", "Victorias City", "Enrique B. Magalona", "Hinigaran", "Hinoba-an", "Ilog", "Isabela", "La Castellana", "Manapla", "Moises Padilla", "Murcia", "Pontevedra", "Pulupandan", "Salvador Benedicto", "San Enrique", "Toboso", "Valladolid"],
-        "Negros Oriental": ["Amlan", "Ayungon", "Bacong", "Basay", "Bindoy", "Bais City", "Bayawan City", "Canlaon City", "Dumaguete City", "Guihulngan City", "Tanjay City", "Dauin", "Jimalalud", "La Libertad", "Mabinay", "Manjuyod", "Pamplona", "San Jose", "Santa Catalina", "Siaton", "Sibulan", "Tayasan", "Valencia", "Vallehermoso", "Zamboanguita"],
-        "Siquijor": ["Enrique Villanueva", "Larena", "Lazi", "Maria", "San Juan", "Siquijor"]
-    },
-    "Central Visayas (Region VII)": {
-        "Bohol": ["Alburquerque", "Alicia", "Anda", "Antequera", "Baclayon", "Balilihan", "Batuan", "Bien Unido", "Bilar", "Buenavista", "Calape", "Candijay", "Carmen", "Catigbian", "Tagbilaran City", "Clarin", "Corella", "Cortes", "Dagohoy", "Danao", "Dauis", "Dimiao", "Duero", "Garcia Hernandez", "Getafe", "Guindulman", "Inabanga", "Jagna", "Lila", "Loay", "Loboc", "Loon", "Mabini", "Maribojoc", "Panglao", "Pilar", "Pres. Carlos P. Garcia", "Sagbayan", "San Isidro", "San Miguel", "Sevilla", "Sierra Bullones", "Sikatuna", "Talibon", "Trinidad", "Tubigon", "Ubay", "Valencia"],
-        "Cebu": ["Alcantara", "Alcoy", "Alegria", "Aloguinsan", "Argao", "Asturias", "Badian", "Balamban", "Bantayan", "Barili", "Boljoon", "Borbon", "Carmen", "Catmon", "Bogo City", "Carcar City", "Cebu City", "Lapu-Lapu City", "Mandaue City", "Naga City", "Talisay City", "Toledo City", "Compostela", "Consolacion", "Cordova", "Daanbantayan", "Dalaguete", "Danao City", "Dumanjug", "Ginatilan", "Liloan", "Madridejos", "Malabuyoc", "Medellin", "Minglanilla", "Moalboal", "Oslob", "Pilar", "Pinamungahan", "Poro", "Ronda", "Samboan", "San Fernando", "San Francisco", "San Remigio", "Santa Fe", "Santander", "Sibonga", "Sogod", "Tabogon", "Tabuelan", "Tuburan", "Tudela"]
-    },
-    "Eastern Visayas (Region VIII)": {
-        "Eastern Samar": ["Arteche", "Balangiga", "Balangkayan", "Borongan City", "Can-avid", "Dolores", "General MacArthur", "Giporlos", "Guiuan", "Hernani", "Jipapad", "Lawaan", "Maslog", "Llorente", "Maydolong", "Mercedes", "Oras", "Quinapondan", "Salcedo", "San Julian", "San Policarpo", "Sulat", "Taft"],
-        "Leyte": ["Abuyog", "Alangalang", "Albuera", "Babatngon", "Barugo", "Bato", "Burauen", "Calubian", "Capoocan", "Carigara", "Baybay City", "Tacloban City", "Dagami", "Dulag", "Hilongos", "Hindang", "Inopacan", "Isabel", "Jaro", "Javier", "Julita", "Kananga", "La Paz", "Leyte", "MacArthur", "Mahaplag", "Matag-ob", "Matalom", "Mayorga", "Merida", "Ormoc City", "Palo", "Palompon", "Pastrana", "San Isidro", "San Miguel", "Santa Fe", "Tabango", "Tabontabon", "Tanauan", "Tolosa", "Tunga", "Villaba"],
-        "Northern Samar": ["Allen", "Biri", "Bobon", "Capul", "Catarman", "Catubig", "Gamay", "Laoang", "Lapinig", "Las Navas", "Lavezares", "Lope de Vega", "Mapanas", "Mondragon", "Palapag", "Pambujan", "Rosario", "San Antonio", "San Isidro", "San Jose", "San Roque", "San Vicente", "Silvino Lobos", "Victoria"],
-        "Samar": ["Almagro", "Basey", "Calbiga", "Calbayog City", "Catbalogan City", "Daram", "Gandara", "Hinabangan", "Jiabong", "Marabut", "Matuguinao", "Motiong", "Pagsanghan", "Paranas", "Pinabacdao", "San Jorge", "San Jose de Buan", "San Sebastian", "Santa Margarita", "Santa Rita", "Santo Niño", "Tagapul-an", "Talalora", "Tarangnan", "Villareal", "Zumarraga"],
-        "Southern Leyte": ["Anahawan", "Bontoc", "Maasin City", "Hinunangan", "Hinundayan", "Libagon", "Liloan", "Limasawa", "Macrohon", "Malitbog", "Padre Burgos", "Pintuyan", "Saint Bernard", "San Francisco", "San Juan", "San Ricardo", "Silago", "Sogod", "Tomas Oppus"],
-        "Biliran": ["Almeria", "Biliran", "Cabucgayan", "Caibiran", "Culaba", "Kawayan", "Maripipi", "Naval"]
-    },
-    "Zamboanga Peninsula (Region IX)": {
-        "Sulu": ["Hadji Panglima Tahil", "Indanan", "Jolo", "Kalingalan Caluang", "Lugus", "Luuk", "Maimbung", "Old Panamao", "Omar", "Pandami", "Panglima Estino", "Pangutaran", "Parang", "Pata", "Patikul", "Siasi", "Talipao", "Tapul", "Tongkil"],
-        "Zamboanga del Norte": ["Bacungan (Leon T. Postigo)", "Baliguian", "Dapitan City", "Dipolog City", "Godod", "Gutalac", "Jose Dalman", "Kalawit", "Katipunan", "La Libertad", "Labason", "Liloy", "Manukan", "Mutia", "Piñan", "Polanco", "Pres. Manuel A. Roxas", "Rizal", "Salug", "Sergio Osmeña Sr.", "Siayan", "Sibuco", "Sibutad", "Sindangan", "Siocon", "Sirawai", "Tampilisan"],
-        "Zamboanga del Sur": ["Aurora", "Bayog", "Pagadian City", "Zamboanga City", "Dimataling", "Dinas", "Dumalinao", "Dumingag", "Guipos", "Josefina", "Kumalarang", "Labangan", "Lakewood", "Lapuyan", "Mahayag", "Margosatubig", "Midsalip", "Molave", "Pitogo", "Ramon Magsaysay", "San Miguel", "San Pablo", "Sominot", "Tabina", "Tambulig", "Tigbao", "Tukuran", "Vincenzo A. Sagun"],
-        "Zamboanga Sibugay": ["Alicia", "Buug", "Diplahan", "Imelda", "Ipil", "Kabasalan", "Mabuhay", "Malangas", "Naga", "Olutanga", "Payao", "Roseller Lim", "Siay", "Talusan", "Titay", "Tungawan"],
-        "Basilan": ["Isabela City"]
-    },
-    "Northern Mindanao (Region X)": {
-        "Bukidnon": ["Baungon", "Cabanglasan", "Malaybalay City", "Valencia City", "Damulog", "Dangcagan", "Don Carlos", "Impasug-ong", "Kadingilan", "Kalilangan", "Kibawe", "Kitaotao", "Lantapan", "Libona", "Malitbog", "Manolo Fortich", "Maramag", "Pangantucan", "Quezon", "San Fernando", "Sumilao", "Talakag"],
-        "Camiguin": ["Catarman", "Guinsiliban", "Mahinog", "Mambajao", "Sagay"],
-        "Lanao del Norte": ["Bacolod", "Baloi", "Baroy", "Iligan City", "Kapatagan", "Kauswagan", "Kolambugan", "Lala", "Linamon", "Magsaysay", "Maigo", "Matungao", "Munai", "Nunungan", "Pantao Ragat", "Pantar", "Poona Piagapo", "Salvador", "Sapad", "Sultan Naga Dimaporo", "Tagoloan", "Tangcal", "Tubod"],
-        "Misamis Occidental": ["Aloran", "Baliangao", "Bonifacio", "Calamba", "Oroquieta City", "Ozamiz City", "Tangub City", "Clarin", "Concepcion", "Don Victoriano", "Jimenez", "Lopez Jaena", "Panaon", "Plaridel", "Sapang Dalaga", "Sinacaban", "Tudela"],
-        "Misamis Oriental": ["Alubijid", "Balingasag", "Balingoan", "Binuangan", "Cagayan de Oro City", "El Salvador City", "Gingoog City", "Claveria", "Gitagum", "Initao", "Jasaan", "Kinoguitan", "Lagonglong", "Laguindingan", "Libertad", "Lugait", "Magsaysay", "Manticao", "Medina", "Naawan", "Opol", "Salay", "Sugbongcogon", "Tagoloan", "Talisayan", "Villanueva"]
-    },
     "Davao Region (Region XI)": {
-        "Davao del Norte": ["Asuncion", "Braulio E. Dujali", "Carmen", "Panabo City", "Tagum City", "Island Garden City of Samal", "Kapalong", "New Corella", "Sawata", "Santo Tomas", "Talaingod"],
-        "Davao del Sur": ["Bansalan", "Davao City", "Digos City", "Hagonoy", "Kiblawan", "Magsaysay", "Malalag", "Matanao", "Padada", "Santa Cruz", "Sulop"],
-        "Davao Oriental": ["Baganga", "Banaybanay", "Boston", "Caraga", "Cateel", "Mati City", "Governor Generoso", "Lupon", "Manay", "San Isidro", "Tarragona"],
-        "Davao de Oro": ["Compostela", "Laak", "Mabini", "Maco", "Maragusan", "Mawab", "Monkayo", "Montevista", "Nabunturan", "New Bataan", "Pantukan"],
-        "Davao Occidental": ["Don Marcelino", "Jose Abad Santos", "Malita", "Santa Maria", "Sarangani"]
-    },
-    "SOCCSKSARGEN (Region XII)": {
-        "Cotabato": ["Alamada", "Aleosan", "Antipas", "Arakan", "Banisilan", "Carmen", "Kidapawan City", "Kabacan", "Libungan", "Mlang", "Magpet", "Makilala", "Matalam", "Midsayap", "Pigcawayan", "Pikit", "President Roxas", "Tulunan"],
-        "South Cotabato": ["Banga", "General Santos City", "Koronadal City", "Lake Sebu", "Norala", "Polomolok", "Santo Niño", "Surallah", "Tboli", "Tampakan", "Tantangan", "Tupi"],
-        "Sultan Kudarat": ["Bagumbayan", "Tacurong City", "Columbio", "Esperanza", "Isulan", "Kalamansig", "Lambayong", "Lebak", "Lutayan", "Palimbang", "President Quirino", "Senator Ninoy Aquino"],
-        "Sarangani": ["Alabel", "Glan", "Kiamba", "Maasim", "Maitum", "Malapatan", "Malungon"]
-    },
-    "Caraga (Region XIII)": {
-        "Agusan del Norte": ["Buenavista", "Carmen", "Butuan City", "Cabadbaran City", "Jabonga", "Kitcharao", "Las Nieves", "Magallanes", "Nasipit", "Remedios T. Romualdez", "Santiago", "Tubay"],
-        "Agusan del Sur": ["Bunawan", "Bayugan City", "Esperanza", "La Paz", "Loreto", "Prosperidad", "Rosario", "San Francisco", "San Luis", "Santa Josefa", "Sibagat", "Talacogon", "Trento", "Veruela"],
-        "Surigao del Norte": ["Alegria", "Bacuag", "Burgos", "Surigao City", "Claver", "Dapa", "Del Carmen", "General Luna", "Gigaquit", "Mainit", "Malimono", "Pilar", "Placer", "San Benito", "San Francisco (Anao-aon)", "San Isidro", "San Jose", "Santa Monica", "Sison", "Socorro", "Tagana-an", "Tubod"],
-        "Surigao del Sur": ["Barobo", "Bayabas", "Cagwait", "Cantilan", "Carmen", "Carrascal", "Bislig City", "Tandag City", "Cortes", "Hinatuan", "Lanuza", "Lianga", "Lingig", "Madrid", "Marihatag", "San Agustin", "San Miguel", "Tagbina", "Tago"],
-        "Dinagat Islands": ["Basilisa", "Cagdianao", "Dinagat", "Libjo", "Loreto", "San Jose", "Tubajon"]
-    },
-    "Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)": {
-        "Basilan": ["Akbar", "Al-Barka", "Lamitan City", "Hadji Mohammad Ajul", "Hadji Muhtamad", "Isabela", "Lantawan", "Maluso", "Sumisip", "Tabuan-Lasa", "Tipo-Tipo", "Tuburan", "Ungkaya Pukan"],
-        "Lanao del Sur": ["Amai Manabilang", "Bacolod-Kalawi", "Balabagan", "Balindong", "Bayang", "Binidayan", "Buadiposo-Buntong", "Bubong", "Butig", "Calanogas", "Marawi City", "Ditsaan-Ramain", "Ganassi", "Kapai", "Kapatagan", "Lumba-Bayabao", "Lumbaca-Unayan", "Lumbatan", "Lumbayanague", "Madalum", "Madamba", "Maguing", "Malabang", "Marantao", "Marogong", "Masiu", "Mulondo", "Pagayawan", "Piagapo", "Picong", "Poona Bayabao", "Pualas", "Saguiaran", "Sultan Dumalondong", "Tagoloan II", "Tamparan", "Taraka", "Tubaran", "Tugaya", "Wao"],
-        "Maguindanao del Norte": ["Barira", "Buldon", "Datu Blah T. Sinsuat", "Datu Odin Sinsuat", "Kabuntalan", "Matanog", "Northern Kabuntalan", "Parang", "Sultan Kudarat (Nuling)", "Sultan Mastura", "Talitay", "Upi Maguindanao del Sur"],
-        "Maguindanao del Sur": ["Ampatuan", "Buluan", "Datu Abdullah Sangki", "Datu Anggal Midtimbang", "Datu Hoffer Ampatuan", "Datu Paglas", "Datu Piang", "Datu Salibo", "Datu Saudi-Ampatuan", "Datu Unsay", "General S. K. Pendatun", "Guindulungan", "Mamasapano", "Mangudadatu", "Pagagawan", "Pagalungan", "Paglat", "Pandag", "Rajah Buayan", "Shariff Aguak", "Shariff Saydona Mustapha", "South Upi", "Sultan sa Barongis", "Talayan"],
-        "Tawi-Tawi": ["Bongao", "Languyan", "Mapun", "Panglima Sugala", "Sapa-Sapa", "Sibutu", "Simunul", "Sitangkai", "South Ubian", "Tandubas", "Turtle Islands"]
+        "Davao del Sur": ["Bansalan", "Davao City", "Digos City", "Hagonoy", "Kiblawan", "Magsaysay", "Malalag", "Matanao", "Padada", "Santa Cruz", "Sulop"]
     }
 };
 
@@ -417,6 +324,16 @@ function updateGradeDescriptionHint(prefix) {
 }
 
 // SESSION CONTROL & ROLE MANAGEMENT
+function quickLogin(email, password) {
+    document.getElementById('login-email').value = email;
+    document.getElementById('login-password').value = password;
+    const form = document.getElementById('login-form');
+    if (form) {
+        const event = new Event('submit', { cancelable: true });
+        form.dispatchEvent(event);
+    }
+}
+
 function checkSession() {
     const session = JSON.parse(localStorage.getItem(SESSION_KEY));
     const authScreen = document.getElementById('auth-screen');
@@ -429,21 +346,34 @@ function checkSession() {
         document.getElementById('user-display-name').innerText = session.name;
         
         let roleTitle = 'Consumer';
-        if (session.role === 'farmer') roleTitle = 'Farmer';
-        else if (session.role === 'transpo_company') roleTitle = 'Transpo Co.';
-        else if (session.role === 'transpo_rider') roleTitle = 'Rider';
+        let roleClass = 'consumer';
+        if (session.role === 'admin') { roleTitle = 'Admin'; roleClass = 'admin'; }
+        else if (session.role === 'farmer') { roleTitle = 'Farmer'; roleClass = 'farmer'; }
+        else if (session.role === 'transpo_company') { roleTitle = 'Transpo Co.'; roleClass = 'transpo'; }
+        else if (session.role === 'transpo_rider') { roleTitle = 'Rider'; roleClass = 'rider'; }
 
-        document.getElementById('user-display-role').innerText = roleTitle;
+        const roleBadge = document.getElementById('user-display-role');
+        if (roleBadge) {
+            roleBadge.innerText = roleTitle;
+            roleBadge.className = 'role-badge ' + roleClass;
+        }
 
         // Hide all portals first
         document.getElementById('consumer-portal').classList.add('hidden');
         document.getElementById('farmer-portal').classList.add('hidden');
         document.getElementById('transpo-portal').classList.add('hidden');
         document.getElementById('rider-portal').classList.add('hidden');
+        if (document.getElementById('admin-portal')) document.getElementById('admin-portal').classList.add('hidden');
         document.getElementById('farmer-mode-switcher').classList.add('hidden');
         document.getElementById('rider-duty-container').classList.add('hidden');
 
-        if (session.role === 'farmer') {
+        if (session.role === 'admin') {
+            if (document.getElementById('admin-portal')) document.getElementById('admin-portal').classList.remove('hidden');
+            document.getElementById('nav-cart-btn').classList.add('hidden');
+            document.getElementById('search-container').classList.add('hidden');
+            document.getElementById('orders-btn-label').innerText = "System Audit";
+            renderAdminDashboard();
+        } else if (session.role === 'farmer') {
             document.getElementById('farmer-mode-switcher').classList.remove('hidden');
             document.getElementById('nav-cart-btn').classList.remove('hidden');
             document.getElementById('search-container').classList.remove('hidden');
@@ -2059,6 +1989,7 @@ Please enter the reason for backtracking (e.g. "Rider vehicle delay", "Address r
             renderOrdersList();
             if (session.role === 'transpo_company') renderTranspoOrders();
             if (session.role === 'transpo_rider') renderRiderDashboard();
+            if (session.role === 'admin') { updateAdminStats(); renderAdminOrders(); }
             return;
         }
     } else if (newIdx > currentIdx + 1) {
@@ -2066,6 +1997,7 @@ Please enter the reason for backtracking (e.g. "Rider vehicle delay", "Address r
         renderOrdersList();
         if (session.role === 'transpo_company') renderTranspoOrders();
         if (session.role === 'transpo_rider') renderRiderDashboard();
+            if (session.role === 'admin') { updateAdminStats(); renderAdminOrders(); }
         return;
     }
 
@@ -2098,6 +2030,7 @@ Please enter the reason for backtracking (e.g. "Rider vehicle delay", "Address r
     renderOrdersList();
     if (session.role === 'transpo_company') renderTranspoOrders();
     if (session.role === 'transpo_rider') renderRiderDashboard();
+            if (session.role === 'admin') { updateAdminStats(); renderAdminOrders(); }
 
     alert(`Order ${orderId} updated to "${newStatus}"!`);
 }
@@ -2493,4 +2426,194 @@ function updateUnreadMessagesCount() {
     } else {
         badge.classList.add('hidden');
     }
+}
+
+
+// SYSTEM ADMIN DASHBOARD & MODERATION ENGINE
+// ==========================================
+
+function renderAdminDashboard() {
+    switchAdminTab('users');
+    updateAdminStats();
+}
+
+function switchAdminTab(tabName) {
+    const isUsers = tabName === 'users';
+    const isListings = tabName === 'listings';
+    const isOrders = tabName === 'orders';
+
+    const btnUsers = document.getElementById('tab-admin-users-btn');
+    const btnListings = document.getElementById('tab-admin-listings-btn');
+    const btnOrders = document.getElementById('tab-admin-orders-btn');
+
+    if (btnUsers) btnUsers.classList.toggle('active', isUsers);
+    if (btnListings) btnListings.classList.toggle('active', isListings);
+    if (btnOrders) btnOrders.classList.toggle('active', isOrders);
+
+    const paneUsers = document.getElementById('admin-tab-users');
+    const paneListings = document.getElementById('admin-tab-listings');
+    const paneOrders = document.getElementById('admin-tab-orders');
+
+    if (paneUsers) paneUsers.classList.toggle('hidden', !isUsers);
+    if (paneListings) paneListings.classList.toggle('hidden', !isListings);
+    if (paneOrders) paneOrders.classList.toggle('hidden', !isOrders);
+
+    updateAdminStats();
+    if (isUsers) renderAdminUsers();
+    if (isListings) renderAdminListings();
+    if (isOrders) renderAdminOrders();
+}
+
+function updateAdminStats() {
+    const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+    const products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
+    const orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
+
+    const grossRevenue = orders
+        .filter(o => o.status === 'Package Delivered')
+        .reduce((sum, o) => sum + (o.total || 0), 0);
+
+    if (document.getElementById('admin-stat-users')) document.getElementById('admin-stat-users').innerText = users.length;
+    if (document.getElementById('admin-stat-products')) document.getElementById('admin-stat-products').innerText = products.length;
+    if (document.getElementById('admin-stat-orders')) document.getElementById('admin-stat-orders').innerText = orders.length;
+    if (document.getElementById('admin-stat-revenue')) document.getElementById('admin-stat-revenue').innerText = `₱${grossRevenue.toLocaleString()}`;
+}
+
+function renderAdminUsers() {
+    const container = document.getElementById('admin-users-list');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+    const searchKey = (document.getElementById('admin-user-search')?.value || '').toLowerCase();
+    const selectedRole = document.getElementById('admin-role-filter')?.value || 'all';
+
+    const filteredUsers = users.filter(u => {
+        const matchesRole = selectedRole === 'all' || u.role === selectedRole;
+        const matchesSearch = u.name.toLowerCase().includes(searchKey) ||
+                              u.email.toLowerCase().includes(searchKey) ||
+                              (u.address || '').toLowerCase().includes(searchKey);
+        return matchesRole && matchesSearch;
+    });
+
+    if (filteredUsers.length === 0) {
+        container.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:2rem;">No accounts match the selected criteria.</p>`;
+        return;
+    }
+
+    filteredUsers.forEach(u => {
+        let roleText = 'Buyer / Consumer';
+        let badgeColor = 'background:var(--primary-green);';
+        
+        if (u.role === 'farmer') { roleText = 'Farmer / Producer'; badgeColor = 'background:#15803d;'; }
+        else if (u.role === 'transpo_company') { roleText = 'Transport Company'; badgeColor = 'background:#1e40af;'; }
+        else if (u.role === 'transpo_rider') { roleText = 'Courier Rider'; badgeColor = 'background:#b45309;'; }
+        else if (u.role === 'admin') { roleText = 'System Administrator'; badgeColor = 'background:#7c3aed;'; }
+
+        const card = document.createElement('div');
+        card.className = 'inventory-card';
+        card.innerHTML = `
+            <div class="inv-details">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+                    <strong>${u.name} <span class="role-badge" style="${badgeColor}">${roleText}</span></strong>
+                    <span class="subtext"><code>${u.email}</code></span>
+                </div>
+                <div class="inv-meta" style="margin-top:6px; line-height:1.5;">
+                    <span>📞 Phone: ${u.phone || 'N/A'}</span> • 
+                    <span>📍 Address: ${u.address || 'Philippines'}</span>
+                    ${u.farmName ? `<br><span>🌾 Farm Name: <strong>${u.farmName}</strong></span>` : ''}
+                    ${u.companyName ? `<br><span>🚚 Logistics Affiliation: <strong>${u.companyName}</strong></span>` : ''}
+                </div>
+            </div>
+            <div class="inv-actions">
+                ${u.role !== 'admin' ? `<button type="button" class="btn-danger btn-sm" onclick="deleteUserByAdmin('${u.email}')">🗑️ Remove Account</button>` : `<span class="badge-outline" style="color:#7c3aed; border-color:#7c3aed;">Protected Admin</span>`}
+            </div>`;
+        container.appendChild(card);
+    });
+}
+
+function deleteUserByAdmin(userEmail) {
+    if (!confirm(`Are you sure you want to remove the user account "${userEmail}"? This action cannot be undone.`)) return;
+
+    let users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+    users = users.filter(u => u.email !== userEmail);
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+
+    if (isFirebaseConfigured && db) {
+        db.collection('users').doc(userEmail).delete().catch(err => console.error(err));
+    }
+    renderAdminDashboard();
+    alert(`User account "${userEmail}" was removed from the system.`);
+}
+
+function renderAdminListings() {
+    const container = document.getElementById('admin-products-list');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
+
+    if (products.length === 0) {
+        container.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:var(--text-muted); padding:2rem;">No active produce listings in the system.</p>`;
+        return;
+    }
+
+    products.forEach(p => {
+        const gradeObj = CROP_GRADES[p.grade] || CROP_GRADES["Grade A"];
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+            <div class="card-img-wrapper" onclick="openProductModal(${p.id})">
+                <img src="${p.image}" alt="${p.title}" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=400'">
+                <span class="grade-badge ${gradeObj.badgeClass}">${p.grade || 'Grade A'}</span>
+            </div>
+            <div class="card-content">
+                <span class="category-tag">${p.category}</span>
+                <h4 class="product-title" onclick="openProductModal(${p.id})">${p.title}</h4>
+                <p class="farm-info">📍 ${p.farm || 'Local Farm'} (${p.farmerEmail})</p>
+                <div class="price-row">
+                    <span class="price-amount">₱${p.price} / ${p.unit || 'kg'}</span>
+                    <span class="stock-badge">${p.stock} left</span>
+                </div>
+                <div class="card-actions" style="margin-top:10px;">
+                    <button type="button" class="btn-danger btn-sm flex-1" onclick="deleteProductByAdmin(${p.id})">🗑️ Moderate / Delete Listing</button>
+                </div>
+            </div>`;
+        container.appendChild(card);
+    });
+}
+
+function deleteProductByAdmin(productId) {
+    if (!confirm("As Administrator, are you sure you want to remove this listing from the marketplace?")) return;
+
+    let products = JSON.parse(localStorage.getItem(PRODUCTS_KEY)) || [];
+    products = products.filter(p => p.id !== productId);
+    localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+
+    if (isFirebaseConfigured && db) {
+        db.collection('products').doc(String(productId)).delete().catch(err => console.error(err));
+    }
+    renderAdminDashboard();
+    renderMarketplace();
+    alert("Produce listing removed by Administrator.");
+}
+
+function renderAdminOrders() {
+    const container = document.getElementById('admin-orders-list');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const orders = JSON.parse(localStorage.getItem(ORDERS_KEY)) || [];
+    const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+    const session = JSON.parse(localStorage.getItem(SESSION_KEY));
+
+    if (orders.length === 0) {
+        container.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:3rem;">No platform orders recorded yet.</p>`;
+        return;
+    }
+
+    orders.forEach(order => {
+        const card = createOrderCardElement(order, session, users);
+        container.appendChild(card);
+    });
 }
